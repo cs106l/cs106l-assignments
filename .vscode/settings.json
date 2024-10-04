@@ -1,0 +1,3 @@
+{
+  "C_Cpp.clang_format_fallbackStyle": "{ PointerAlignment: Left, ColumnLimit: 100 }"
+}
