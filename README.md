@@ -73,7 +73,10 @@ Homebrew 4.2.21</pre>
     which is going to install the compiler (GCC).
   </li>
   <li>
-    After installing GCC, restart your terminal and verify that everything worked by running the following command:
+    Make note of which GCC version Homebrew installs. In most cases, this will be <code>g++-14</code>. 
+    By default, the <code>g++</code> command on Mac is an alias to the built-in <code>clang</code> compiler. We can fix this by running <pre lang="sh">echo 'alias g++="g++-14"' >> ~/.zshrc</pre> to make <code>g++</code> point to the version of GCC we just installed. Change <code>g++-14</code> in the above command to whichever version of GCC you installed.
+  <li>
+    Restart your terminal and verify that everything worked by running the following command:
     <pre lang="sh">g++ --version</pre>
   </li>
 </ol>
