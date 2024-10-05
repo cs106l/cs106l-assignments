@@ -13,7 +13,7 @@ Before getting started, a few prerequisites:
 Next, download the starter code. Open up a terminal (if you are using VSCode, hit <kbd>Ctrl+\`</kbd> or go to **Terminal > New Terminal** at the top) and run the following command:
 
 ```sh
-git clone git@github.com:cs106l/cs106l-assignments.git
+git clone https://github.com/cs106l/cs106l-assignments.git
 ```
 
 which will download the starter code into a folder `cs106l-assignments`. If you are using VSCode, you can then open up a VSCode workspace dedicated to CS106L:
