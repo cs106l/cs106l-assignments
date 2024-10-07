@@ -1,3 +1,23 @@
+def check_virtualenv():
+    import sys
+    import os
+    import subprocess
+
+    if not hasattr(sys, 'real_prefix') and (sys.base_prefix == sys.prefix):
+        print("🔍 Not in a virtual environment. Creating one in 'autograder/'...")
+        venv_path = os.path.dirname(os.path.abspath(__file__))
+        subprocess.check_call([sys.executable, '-m', 'venv', venv_path])
+        print("✅ Virtual environment created.")
+
+        if os.name == "nt":
+          interpreter_path = os.path.join(venv_path, "Scripts", "python")
+        else: 
+          interpreter_path = os.path.join(venv_path, "bin", "python")
+        result = subprocess.run([interpreter_path] + sys.argv)
+        sys.exit(result.returncode)
+
+check_virtualenv()
+
 def install_requirements():
     import sys
     import subprocess
