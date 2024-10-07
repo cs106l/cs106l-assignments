@@ -1,3 +1,6 @@
 {
-  "C_Cpp.clang_format_fallbackStyle": "{ PointerAlignment: Left, ColumnLimit: 100 }"
+  "C_Cpp.clang_format_fallbackStyle": "{ PointerAlignment: Left, ColumnLimit: 100 }",
+  "files.associations": {
+    "queue": "cpp"
+  }
 }
