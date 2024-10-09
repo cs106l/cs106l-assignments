@@ -118,6 +118,4 @@ After compiling and running, if your autograder looks like this:
 
 ![An image showing a terminal window where the autograder has run with all tests passing](docs/autograder.png)
 
-then you have finished the assignment! Woot woot.
-
-Please stay tuned for submission instructions. The instructions to submit this assignment will be posted on Ed (and updated here) closer to the assignment deadline.
+then you have finished the assignment! Woot woot. To submit the assignment, please complete the feedback form [at this link](https://forms.gle/UfSDVYpbg472ZXkJ8). Once you submit the form, a link to the submission page will show up in the form submission confirmation.
