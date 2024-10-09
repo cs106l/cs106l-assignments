@@ -70,6 +70,10 @@ For this section, you will write the function:
 
 - `find_matches`: From the set, take all names that share your initials and place pointers to them in a new `std::queue`.
   - If you’re having trouble figuring out how to iterate through a set, it could be helpful to look back over Thursday’s lecture on iterators and pointers.
+
+> [!NOTE]
+> You will need to be familiar with the operations of a `std::queue` for this part. Take a look at cppreference's documentation [here](https://en.cppreference.com/w/cpp/container/queue)
+
 - From here, please print in the main function your “one true match.” This can be determined as you see fit; choose some method of acquiring one student from the queue, ideally something with a bit more thought than a single `pop()`, but it doesn’t have to be particularly complicated! Consider random values or other methods of selection.
   - If your initials have no matches in the dataset, print `“NO STUDENT FOUND.”` Better luck next year :(
 
