@@ -81,6 +81,29 @@ Homebrew 4.2.21</pre>
   </li>
 </ol>
 
+### Linux
+
+These instructions are for Debian-based distributions, like Ubuntu. Tested on Ubuntu 20.04 LTS.
+
+#### Step One: Installing VSCode
+
+Go to [this link](https://code.visualstudio.com/docs/setup/linux)
+and download Visual Studio Code for Linux. Follow the instructions on this webpage under the section **Installation**.
+
+Inside VSCode, head to the extensions tab <img src="docs/vscode-extensions.png" display="inline" height="20px"></img> and search for **C/C++**. Click on the **C/C++** extension, and then click **Install**.
+
+<b> 🥳 At this point you should successfully have VSCode on your Linux 👏 </b>
+
+#### Step Two: Installing a C++ Compiler
+
+<ol>
+  <li>In a terminal, update the Ubuntu package lists by running <pre lang="sh">sudo apt-get update</pre></li>
+  <li>Next install the G++ compiler: <pre lang="sh">sudo apt-get install g++-10</pre></li>
+  <li>By default, the system version of G++ will be used. To change it to the version you just installed, you can configure Linux to use G++ version 10 a higher version installed like so: <pre lang="sh">sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 10</pre></li>
+  <li>Restart your terminal and verify that GCC was installed correctly. You must have a GCC version of 10 or higher: <pre lang="sh">g++ --version</pre></li>
+</ol>
+
+
 ### Windows
 
 #### Step One: Installing VSCode
