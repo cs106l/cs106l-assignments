@@ -10,10 +10,11 @@ Due Friday, October 18th at 11:59PM
 
 Happy assignment 2! This is meant to be a very short and sweet bit of practice to get you started working with the STL’s containers and pointers.
 
-There are only two files you need to care about:
+These are the files you need to care about:
 
 - `main.cpp`: All your code goes here 😀!
 - `short_answer.txt`: Short answer responses go here 📝!
+- `utils.h`: You must change the functions in this file if you choose to use an `std::unordered_set`
 
 To download the starter code for this assignment, please see the instructions for [**Getting Started**](../README.md#getting-started) on the course assignments repository.
 
@@ -64,7 +65,7 @@ We’ve included a `.txt` file of all of the (fictional) students who signed up 
 > [!IMPORTANT]
 >
 > ### `get_applicants`
-> From the `.txt` file, parse all of the names into a set. Each line contained in the file named `filename` is a single applicant's name. In your implementation, you are free to choose between an ordered (`std::set`) and unordered set (`std::unordered_set`) as you wish!
+> From the `.txt` file, parse all of the names into a set. Each line contained in the file named `filename` is a single applicant's name. In your implementation, you are free to choose between an ordered (`std::set`) and unordered set (`std::unordered_set`) as you wish! If you do choose to use an unordered set, make sure to also change the relevant function definitions in `utils.h`!
 
 Additionally, please answer the following short answer question in `short_answer.txt`:
 
@@ -111,6 +112,7 @@ Before you submit the assignment, please fill out this [short feedback form](htt
 Your deliverable should be:
 
 - `main.cpp`
+- `utils.h`
 - `short_answer.txt`
 
 You may resubmit as many times as you'd like before the deadline.
