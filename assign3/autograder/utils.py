@@ -66,6 +66,7 @@ init()
 class TestPart:
     name: str
     func: Callable[[], Union[bool, None]]
+    special: bool = False
 
 
 class Autograder:
@@ -80,11 +81,14 @@ class Autograder:
         self.parts.append(TestPart(name, func))
 
     def run(self) -> None:
-        if not self._run_lifecycle("set up", self.setup):
-            return
+        parts = self.parts.copy()
+        if self.setup:
+          parts.insert(0, TestPart("Autograder Setup", self.setup, True))
+        if self.teardown:
+          parts.append(0, TestPart("Autograder Teardown", self.teardown, True))
 
         failures = False
-        for part in self.parts:
+        for part in parts:
             header = f"Running test: {part.name}... 🧪".ljust(80)
             print(f"\n{Back.CYAN}{Fore.LIGHTWHITE_EX}{header}{Style.RESET_ALL}")
 
@@ -98,15 +102,13 @@ class Autograder:
                 result = False
 
             if result is None or result:
-                print(f"{Fore.GREEN}✅ {part.name} passed! 🚀 {Fore.RESET}")
+                if not part.special:
+                    print(f"{Fore.GREEN}✅ {part.name} passed! 🚀 {Fore.RESET}")
             else:
                 print(f"{Fore.RED}❌ {part.name} failed! 😞 {Fore.RESET}")
                 if error:
-                    print(f"{Style.BRIGHT}Error:{Style.DIM} {error}{Style.RESET_ALL}")
+                    print(f"{Style.BRIGHT}Reason:{Style.DIM} {error}{Style.RESET_ALL}")
                 failures = True
-
-        if not self._run_lifecycle("tear down", self.teardown):
-            return
 
         if not failures:
             message = "🚀🚀🚀 Congratulations, your code passed all the autograder tests! 🚀🚀🚀"
@@ -114,14 +116,4 @@ class Autograder:
             print(
                 f"\n{Back.LIGHTGREEN_EX}{Fore.LIGHTWHITE_EX}{message}{Style.RESET_ALL}"
             )
-
-    def _run_lifecycle(self, label: str, func: Optional[Callable[[], None]]) -> bool:
-        if func is None: return True
-        try:
-            func()
-        except Exception as e:
-            print(f"{Fore.RED}❌ Failed to {label} autograder {Fore.RESET}")
-            print(f"{Style.BRIGHT}Error:{Style.DIM} {e}{Style.RESET_ALL}")
-            return False
-        return True
       
