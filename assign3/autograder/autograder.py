@@ -1,5 +1,7 @@
 from utils import Autograder
+
 import os
+import subprocess
 
 from pygccxml import utils as gccutils
 from pygccxml import declarations
@@ -20,16 +22,28 @@ def setup():
   # Grab the C++ parser
   generator_path, generator_name = gccutils.find_xml_generator()
 
+  compiler_path = None
+  if os.name == "nt":
+    result = result = subprocess.run(['where', 'g++'], capture_output=True, text=True)
+    if result.returncode != 0:
+      raise RuntimeError("Couldn't find the path to g++. Did you follow the setup instructions?\n\nhttps://github.com/cs106l/cs106l-assignments")
+    compiler_path = result.stdout.strip()
+
   # Configure the C++ parser
   xml_generator_config = parser.xml_generator_configuration_t(
     xml_generator_path=generator_path,
-    xml_generator=generator_name
+    xml_generator=generator_name,
+    compiler="g++",
+    compiler_path=compiler_path,
+    working_directory=PATH
   )
 
-  decls = parser.parse([main_cpp_path], xml_generator_config)
-  global_namespace = declarations.get_global_namespace(decls)
-  classes = global_namespace.classes()
-  print(classes)
+  print(xml_generator_config.__dict__)
+
+  # decls = parser.parse([main_cpp_path], xml_generator_config)
+  # global_namespace = declarations.get_global_namespace(decls)
+  # classes = global_namespace.classes()
+  # print(classes)
 
 
 if __name__ == "__main__":

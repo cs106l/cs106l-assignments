@@ -6,14 +6,22 @@ def check_virtualenv():
     if not hasattr(sys, 'real_prefix') and (sys.base_prefix == sys.prefix):
         print("🔍 Not in a virtual environment. Creating one in 'autograder/'...")
         venv_path = os.path.dirname(os.path.abspath(__file__))
+
         subprocess.check_call([sys.executable, '-m', 'venv', venv_path])
         print("✅ Virtual environment created.")
 
         if os.name == "nt":
-          interpreter_path = os.path.join(venv_path, "Scripts", "python")
+          bin_dir = os.path.join(venv_path, "Scripts")
         else: 
-          interpreter_path = os.path.join(venv_path, "bin", "python")
-        result = subprocess.run([interpreter_path] + sys.argv)
+          bin_dir = os.path.join(venv_path, "bin")
+
+        env = os.environ.copy()
+        env["PATH"] = os.pathsep.join([bin_dir, *env.get("PATH", "").split(os.pathsep)])
+        env["VIRTUAL_ENV"] = venv_path  # virtual env is right above bin directory
+        env["VIRTUAL_ENV_PROMPT"] = os.path.basename(venv_path)
+        
+        interpreter_path = os.path.join(bin_dir, "python")
+        result = subprocess.run([interpreter_path] + sys.argv, env=env)
         sys.exit(result.returncode)
 
 check_virtualenv()
@@ -22,6 +30,19 @@ def install_requirements():
     import sys
     import subprocess
     import os
+
+    # pip might need to be updated for packages to install, so let's make sure
+    def check_pip_update():
+      result = subprocess.run([sys.executable, "-m", "pip", "list", "--outdated"],
+                              stdout=subprocess.PIPE, text=True)
+      return "pip" in result.stdout 
+    
+    if check_pip_update():
+      print("⏳ Detected outdated pip version. Updating...")
+      subprocess.check_call(
+          [sys.executable, "-m", "pip", "install", "-U", "pip"],
+          stdout=subprocess.DEVNULL,
+      )
 
     REQUIREMENTS = os.path.join(os.path.dirname(__file__), "requirements.txt")
     print("⏳ Installing autograder packages (this may take a few minutes)...")
