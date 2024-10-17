@@ -34,16 +34,16 @@ def setup():
     xml_generator_path=generator_path,
     xml_generator=generator_name,
     compiler="g++",
-    compiler_path=compiler_path,
+    compiler_path=f'"(" {compiler_path} -std=c++11 ")"',
     working_directory=PATH
   )
 
   print(xml_generator_config.__dict__)
 
-  # decls = parser.parse([main_cpp_path], xml_generator_config)
-  # global_namespace = declarations.get_global_namespace(decls)
-  # classes = global_namespace.classes()
-  # print(classes)
+  decls = parser.parse([main_cpp_path], xml_generator_config)
+  global_namespace = declarations.get_global_namespace(decls)
+  classes = global_namespace.classes()
+  print(classes)
 
 
 if __name__ == "__main__":
