@@ -28,13 +28,14 @@ def setup():
     if result.returncode != 0:
       raise RuntimeError("Couldn't find the path to g++. Did you follow the setup instructions?\n\nhttps://github.com/cs106l/cs106l-assignments")
     compiler_path = result.stdout.strip()
+    compiler_path = f'"(" {compiler_path} -std=c++11 ")"'
 
   # Configure the C++ parser
   xml_generator_config = parser.xml_generator_configuration_t(
     xml_generator_path=generator_path,
     xml_generator=generator_name,
     compiler="g++",
-    compiler_path=f'"(" {compiler_path} -std=c++11 ")"',
+    compiler_path=compiler_path,
     working_directory=PATH
   )
 
