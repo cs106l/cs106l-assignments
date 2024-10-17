@@ -36,7 +36,8 @@ def setup():
     xml_generator=generator_name,
     compiler="g++",
     compiler_path=compiler_path,
-    working_directory=PATH
+    working_directory=PATH,
+    ccflags="-std=c++11"
   )
 
   print(xml_generator_config.__dict__)
