@@ -1,0 +1,11 @@
+Before submitting this file, make sure that there are no more TODO
+placeholders remaining in the file (and remove this comment too).
+
+Make a Class
+------------
+
+Q1. What’s const-correctness and why is it important?
+A1. TODO
+
+Q2. Is your class const-correct? How do you know?
+A2. TODO
