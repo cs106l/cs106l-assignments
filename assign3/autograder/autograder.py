@@ -38,6 +38,7 @@ def install_castxml():
 
     def get_platform_file():
         import platform
+        import cpuinfo
 
         os_name = platform.system().lower()
         arch = platform.machine().lower()
@@ -46,9 +47,11 @@ def install_castxml():
             return "linux-aarch64.tar.gz"
         elif os_name == "linux":
             return "linux.tar.gz"
-        elif os_name == "darwin" and "arm" in arch:
-            return "macos-arm.tar.gz"
         elif os_name == "darwin":
+            # Need to handle running Python under Rosetta on Apple Silicon
+            brand = cpuinfo.get_cpu_info()['brand_raw']
+            if "arm" in arch or re.match(r"Apple M\d+", brand):
+                return "macos-arm.tar.gz"
             return "macosx.tar.gz"
         elif os_name == "windows":
             return "windows.zip"
