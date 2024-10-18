@@ -73,10 +73,10 @@ Let your creative juices flow! Fill in `class.h` and `class.cpp` to create your 
 > 4. Have one or more private member functions.
 >     - Remember, private functions are like what happens underneath the hood of your car! They are a necessary part of the implementation of a class, but shouldn't be exposed in the public interface. Try to think of a private member function that logically makes sense in the context of your class.
 > 5. Have **at least one** public getter function for one of the private fields.
->     - E.g. if `int data` is the field, you must have a function called `set_data` or `setData` with the signature <pre lang="cpp">void setData(int value);</pre>
+>     - E.g. if `int data` is the field, you must have a function called `get_data` or `getData` with the signature <pre lang="cpp">int getData();</pre>
 >     - The getter function should also be marked `const`. Refer to Thursday's lecture on `const` correctness if you are unfamiliar!
 > 6. Have at least one public setter function for one of the private fields.
->     - E.g. if `int data` is the field, you must have a function called `get_data` or `getData` with the signature <pre lang="cpp">int getData();</pre>
+>     - E.g. if `int data` is the field, you must have a function called `set_data` or `setData` with the signature <pre lang="cpp">void setData(int value);</pre>
 
 Note that this is the bare minimum to get credit for the assignment. Please feel free to go above and beyond these requirements or create more than one class if you want extra practice!
 
