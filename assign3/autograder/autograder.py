@@ -364,7 +364,7 @@ def get_prefix_functions(
     return funcs
 
 
-def find_matching_function(prefix: str):
+def find_matching_function(prefix: str, type: str):
     fields = get_private_fields()
     field_names = set(f.name for f in fields)
     funcs = get_prefix_functions(prefix)
@@ -378,14 +378,14 @@ def find_matching_function(prefix: str):
         return func, next(f for f in fields if field_name.lower() == f.name)
 
     raise RuntimeError(
-        "No getter function found for a private field. "
-        f"Options were:\n - Getters: [{', '.join(p[0] for p in funcs)}]"
+        f"No {type} function found for a private field. "
+        f"Options were:\n - Getters: [{', '.join(p[0].name for p in funcs)}]"
         f"\n - Private fields: [{', '.join(field_names)}]"
     )
 
 
 def test_getter_function():
-    function, field = find_matching_function("get")
+    function, field = find_matching_function("get", "getter")
     assert len(function.arguments) == 0, "A getter function must have no arguments"
     assert (
         function.return_type == field.decl_type
@@ -397,7 +397,7 @@ def test_getter_function():
 
 
 def test_setter_function():
-    function, field = find_matching_function("set")
+    function, field = find_matching_function("set", "setter")
     assert (
         len(function.arguments) == 1
     ), "A setter should have a single argument matching the type of its field"
