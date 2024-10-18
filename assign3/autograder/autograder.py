@@ -25,6 +25,12 @@ definitions: Set[Tuple[str, str]] = None
 def install_castxml():
     bin_path = os.environ.get("VIRTUAL_ENV_BIN")
     castxml_dir = os.path.join(bin_path, "castxml")
+
+    castxml_bin_dir = os.path.join(castxml_dir, "bin")
+    os.environ["PATH"] = os.pathsep.join(
+        [castxml_bin_dir, *os.environ.get("PATH", "").split(os.pathsep)]
+    )
+
     if os.path.isdir(castxml_dir):
         return
 
@@ -72,11 +78,6 @@ def install_castxml():
     elif castxml_file.endswith(".tar.gz"):
         with tarfile.open(castxml_archive_path, "r:gz") as tar_ref:
             tar_ref.extractall(bin_path)
-
-    castxml_bin_dir = os.path.join(castxml_dir, "bin")
-    os.environ["PATH"] = os.pathsep.join(
-        [castxml_bin_dir, *os.environ.get("PATH", "").split(os.pathsep)]
-    )
 
     print("✅ Installed CastXML!")
 
