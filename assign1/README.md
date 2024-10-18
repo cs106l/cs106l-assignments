@@ -97,13 +97,6 @@ not offered!**
 
 One way to do this is to keep track of the courses that are offered perhaps with another vector and delete them from `all_courses`. Just like in Python and many other languages, it is a bad idea to remove elements from a data structure while you are iterating over it, so you'll probably want to do this *after* you have written all offered courses to file.
 
-> [!NOTE]  
-> Don’t worry, I know you’re wondering what this is:
-> ```cpp
-> auto it = std::find(v.begin(), v.end(), elem);
-> ```
-> We got you... in like 3 weeks.
-
 ## Part 3: `write_courses_not_offered`
 
 So you’re curious about courses that aren’t offered... In the
