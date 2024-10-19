@@ -366,21 +366,22 @@ def get_prefix_functions(
 
 def find_matching_function(prefix: str, type: str):
     fields = get_private_fields()
-    field_names = set(f.name for f in fields)
+    field_names = { f.name.lower(): f for f in fields }
     funcs = get_prefix_functions(prefix)
 
     for func, field_name in funcs:
-        if field_name.lower() not in field_names:
+        field_name_lower = field_name.lower()
+        if field_name_lower not in field_names:
             skip_decl(func, f"{field_name} did not match a private field")
             continue
 
         find_decl(func)
-        return func, next(f for f in fields if field_name.lower() == f.name)
+        return func, field_names[field_name_lower]
 
     raise RuntimeError(
         f"No {type} function found for a private field. "
-        f"Options were:\n - Getters: [{', '.join(p[0].name for p in funcs)}]"
-        f"\n - Private fields: [{', '.join(field_names)}]"
+        f"Options were:\n - {type.title()}s: [{', '.join(p[0].name for p in funcs)}]"
+        f"\n - Private fields: [{', '.join(f.name for f in fields)}]"
     )
 
 
