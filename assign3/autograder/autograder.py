@@ -21,6 +21,8 @@ AUTOGRADER_DIR = os.path.join(PATH, "autograder")
 class_decl: declarations.class_t = None
 definitions: Set[Tuple[str, str]] = None
 
+def norm_path(path: os.PathLike) -> os.PathLike:
+    return os.path.normpath(os.path.relpath(path, os.getcwd()))
 
 def install_castxml():
     bin_path = os.environ.get("VIRTUAL_ENV_BIN")
@@ -198,8 +200,7 @@ def setup():
     )
 
     try:
-        source_path = os.path.relpath(main_cpp_path, os.getcwd())
-        decls = parser.parse([source_path], xml_generator_config)
+        decls = parser.parse([norm_path(main_cpp_path)], xml_generator_config)
         global_namespace = declarations.get_global_namespace(decls)
         classes = global_namespace.classes()
     except Exception as e:
@@ -219,10 +220,13 @@ def setup():
         cls_decl: declarations.class_t
         for cls_decl in classes:
             location: declarations.location_t = cls_decl.location
-            if os.path.normpath(class_h_path) == os.path.normpath(location.file_name):
+            if norm_path(class_h_path) == norm_path(location.file_name):
                 return cls_decl
         raise Exception(
-            'Couldn\'t find a class inside of class.h. Possible reasons:\n - Did you define one?\n - Did you #include "class.h" inside main.cpp?'
+            'Couldn\'t find a class inside of class.h. Possible reasons:\n'
+            ' - Did you define one?\n'
+            ' - Did you #include "class.h" inside main.cpp?\n'
+            ' - Did you construct an instance of the class inside main.cpp?'
         )
 
     global class_decl
@@ -367,7 +371,7 @@ def get_prefix_functions(
 
 def find_matching_function(prefix: str, type: str):
     fields = get_private_fields()
-    field_names = { f.name.lower(): f for f in fields }
+    field_names = { f.name.lower().strip('_'): f for f in fields }
     funcs = get_prefix_functions(prefix)
 
     for func, field_name in funcs:
