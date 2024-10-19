@@ -198,7 +198,8 @@ def setup():
     )
 
     try:
-        decls = parser.parse([main_cpp_path], xml_generator_config)
+        source_path = os.path.relpath(main_cpp_path, os.getcwd())
+        decls = parser.parse([source_path], xml_generator_config)
         global_namespace = declarations.get_global_namespace(decls)
         classes = global_namespace.classes()
     except Exception as e:
