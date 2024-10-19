@@ -402,7 +402,8 @@ def test_setter_function():
     assert (
         len(function.arguments) == 1
     ), "A setter should have a single argument matching the type of its field"
-    assert function.argument_types[0] == field.decl_type, (
+
+    assert declarations.base_type(function.argument_types[0]) == field.decl_type, (
         f"The argument of a setter should be the type of its field. "
         f"Found {function.argument_types[0]} but expected {field.decl_type}"
     )
