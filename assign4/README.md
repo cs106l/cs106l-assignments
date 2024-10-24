@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/theweatherchannel.png" alt="A logo of the weather channel" />
+  <img src="docs/theweatherchannel.png" alt="A logo of The Weather Channel" style="width: 200px; height: auto;" />
 </p>
 
 # Assignment 4: Weather Forcast
@@ -116,9 +116,46 @@ Think about what you've already done! How can you leverage that?
 
 ## Part 4: implement `std::vector<Forceast> get_filtered_data(const std::vector<Forcast>& forecastData)`!
 
-The weather channel is doing some statistical analysis on the data you've compiled, they are interested only in the days with a **maximum of `kMinTempRequirement` degrees Farenheit**, and an **average temperature of `uAvgTempRequirement`**. These values are predefined in the `main.cpp` file, so you don't need to worry about the nominal values of `kMinTempRequirement` and `uAvgTempRequirement`, you just need to use them to filter out your forcasts!
+The Weather Channel is doing some statistical analysis on the data you've compiled, they are interested only in the days with a **maximum of `kMaxTempRequirement` degrees Farenheit**, and an **average temperature of `uAvgTempRequirement`**. These values are predefined in the `main.cpp` file, so you don't need to worry about the nominal values of `kMazTempRequirement` and `uAvgTempRequirement`, you just need to use them to filter out your forcasts!
 
-TODO: Continue writing
+> [!NOTE]
+>
+> We need to **filter** out certain forecasts to meet the requirements of the Weather Channel. Make use of:
+>
+> ```cpp
+> std::remove_if( ForwardIt first, ForwardIt last, UnaryPred p );
+> ```
+>
+> Think about what the `std::remove_if` function does, you can read more about it [here](https://en.cppreference.com/w/cpp/algorithm/remove)
+
+You should return a `std::vector<Forecast>` containing only the `Forecasts` structs where the maxmimum temperature of the day is `kMaxTempRequirement` and the average is `uAvgTempRequirement`.
+
+To do this, define some lambda function(s) to perform this filtering, and pass them into `std::remove_if`.
+
+## Part 5: implement `std::vector<double> get_shuffled_data(const std::vector<Forcast>& forcastData)`!
+
+Finally, the Weather Channel wants you to **shuffle** your `Forecasts`!
+
+> [!NOTE]
+>
+> We need to **shuffle** our filtered forecasts to meet the requirements of the Weather Channel. Make use of:
+>
+> ```cpp
+> std::shuffle( RandomIt first, RandomIt last, URBG&& g );
+> ```
+>
+> `std::shuffle` expects a source of randomness`URBG&& g`
+>
+> You can create a source of randomness, `g` in the following way:
+>
+> ```cpp
+> std::random_device rd;
+> std::mt19937 g(rd());
+> ```
+>
+> You can read more about the shuffle method [here](https://en.cppreference.com/w/cpp/algorithm/remove)
+
+## Part 6: Putting it all together!
 
 ## 🚀 Submission Instructions
 

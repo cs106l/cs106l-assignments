@@ -4,6 +4,7 @@
  */
 
 #include <algorithm>
+#include <random>
 #include <vector>
 
 /* #### Please don't change this line! #### */
@@ -11,7 +12,7 @@ int run_autograder();
 const std::string STUDENT_OUTPUT = "autograder/student_output.txt";
 
 // TODO: change these values
-double kMinTempRequirement = /* TODO */ 5;
+double kMaxTempRequirement = /* TODO */ 5;
 double uAvgTempRequirement = /* TODO */ 5;
 
 struct Forcast {
@@ -38,7 +39,7 @@ std::vector<Forcast> get_filtered_data(const std::vector<Forcast>& forcastData) 
 
 
 std::vector<double> get_shuffled_data(const std::vector<Forcast>& forcastData) {
-  // STUDENT TODO: Make use of a standard library algorithm to shuffle the data!
+  // STUDENT TODO 5: Make use of a standard library algorithm to shuffle the data!
 }
 
 
