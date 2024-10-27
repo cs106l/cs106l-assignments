@@ -47,7 +47,7 @@ As you are following the instructions below, we recommend intermittently compili
 > On Windows, you may need to compile your code using
 >
 > ```sh
-> g++ -static-libstdc++ -std=c++20 main.cpp class.cpp -o main
+> g++ -static-libstdc++ -std=c++20 main.cpp -o main
 > ```
 >
 > in order to see output. Also, the output executable may be called `main.exe`, in which case you'll run your code with:
@@ -167,7 +167,7 @@ Finally, the Weather Channel wants you to **shuffle** your `Forecasts`!
 > std::mt19937 g(rd());
 > ```
 >
-> You can read more about the shuffle method [here](https://en.cppreference.com/w/cpp/algorithm/remove)
+> You can read more about the shuffle method [here](https://en.cppreference.com/w/cpp/algorithm/random_shuffle)
 
 ## Part 5: Putting it all together, implement `std::vector<Forecast> run_weather_pipeline(const std::vector<std::vector<double>>& weatherData)`!
 
