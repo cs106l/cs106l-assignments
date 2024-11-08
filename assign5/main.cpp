@@ -146,7 +146,7 @@ template <typename TUser> void test_compound_assignment() {
       std::cout << b << "\n";
     } else {
       std::cerr << "User does not have a valid operator+=. Function signature "
-                   "should be:\n\n\tUser& operator+=(const User& "
+                   "should be:\n\n\tUser& operator+=(User& "
                    "other);\n\ninside the User class."
                 << "\n";
       std::exit(1);
