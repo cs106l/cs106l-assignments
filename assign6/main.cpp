@@ -67,8 +67,8 @@ int
 main(int argc, char* argv[])
 {
   static_assert(
-    !std::is_same_v<std::result_of<decltype (&CourseDatabase::find_course)(
-                      CourseDatabase, std::string)>::type,
+    !std::is_same_v<std::invoke_result_t<decltype (&CourseDatabase::find_course), 
+                      CourseDatabase, std::string>,
                     FillMeIn>,
     "You must change the return type of CourseDatabase::find_course to "
     "something other than FillMeIn.");
