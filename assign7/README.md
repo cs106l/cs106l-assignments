@@ -189,5 +189,6 @@ Your deliverable should be:
 
 - `unique_ptr.h`
 - `main.cpp`
+- `short_answer.txt`
 
 You may resubmit as many times as you'd like before the deadline.
