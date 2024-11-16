@@ -25,11 +25,12 @@ def get_memory_leak_exit_code() -> int:
 
 
 def verify_output(
-    test_case: str, *, expected: List[str] = [], hint: str = "", show_diff: bool = True
+    test_case: str, *, expected: List[str] = [], hint: str = "", empty_hint: str = "", show_diff: bool = True
 ):
     hint = hint.strip()
     has_hint = bool(hint)
-    hint += " "
+    if has_hint:
+        hint += " "
 
     main_path = get_main_exe_path()
     result = subprocess.run(
@@ -44,6 +45,8 @@ def verify_output(
 
     if result.returncode != 0:
         error = result.stderr.strip()
+        if not error and empty_hint:
+            raise RuntimeError(empty_hint)
         if has_hint:
             if error:
                 raise RuntimeError(f"{hint}Got the following error message:\n\n{error}")
@@ -69,7 +72,7 @@ if __name__ == "__main__":
     grader = Autograder()
     grader.add_part(
         "Part 1: Destructor",
-        lambda: verify_output("destructor"),
+        lambda: verify_output("destructor", hint="Did you make sure to set the underlying pointer to `nullptr` in the `nullptr` version of the constructor? If you didn't, you might be trying to delete an arbitrary region of memory!"),
     )
 
     grader.add_part(
@@ -126,6 +129,7 @@ if __name__ == "__main__":
                 "Destructing node with value 'Chris'",
                 "Destructing node with value 'Sean'",
             ],
+            empty_hint="Hmm... that didn't work. Make sure that you are passing all of the previous tests! You might have an issue with your `unique_ptr` implementation."
         ),
     )
 
