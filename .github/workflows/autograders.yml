@@ -1,0 +1,27 @@
+# This job updates the autograders on every push to main.
+# Autograders are stored in `admin/autograders` in the CS106L AFS directory.
+
+name: Update Autograders
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    # This line prevents this action from running in forks of the repository
+    if: github.repository == 'cs106l/cs106l-assignments'
+
+    steps:
+      - name: Deploy to AFS
+        env:
+          TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -X POST "https://web.stanford.edu/class/cs106l/cgi-bin/deploy/?name=autograders" \
+            -H "Token: $TOKEN" \
+            -H "Github-Token: $GH_TOKEN" \
+            --fail-with-body
