@@ -102,6 +102,20 @@ void parse_csv(std::string filename, std::vector<Course> courses) {
  */
 void write_courses_offered(std::vector<Course> all_courses) {
   /* (STUDENT TODO) Your code goes here... */
+  std::ofstream outFile(COURSES_OFFERED_PATH);
+
+  // 检查文件是否成功打开
+  if (!outFile) {
+      std::cerr << "can not open file：" << COURSES_OFFERED_PATH << std::endl;
+      return;
+  }
+  for (Course course : all_courses) {
+    if (course.quarter == "null") {
+      continue;
+    }
+    outFile << course.title << "," << course.number_of_units <<","<< course.quarter << std::endl;
+  }
+   outFile.close();
 }
 
 /**
@@ -119,6 +133,20 @@ void write_courses_offered(std::vector<Course> all_courses) {
  */
 void write_courses_not_offered(std::vector<Course> unlisted_courses) {
   /* (STUDENT TODO) Your code goes here... */
+  std::ofstream outFile(COURSES_NOT_OFFERED_PATH);
+
+  // 检查文件是否成功打开
+  if (!outFile) {
+      std::cerr << "can not open file：" << COURSES_NOT_OFFERED_PATH << std::endl;
+      return;
+  }
+  for (Course course : unlisted_courses) {
+    if (course.quarter == "null") {
+      outFile << course.title << "," << course.number_of_units <<","<< course.quarter << std::endl;
+    }
+    
+  }
+  outFile.close();
 }
 
 int main() {
