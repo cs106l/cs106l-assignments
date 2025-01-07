@@ -87,7 +87,7 @@ int run_autograder() {
   };
 
   std::string python;
-  for (const auto& option : {"python", "python3", "/usr/bin/python3", "/usr/bin/python"}) {
+  for (const auto& option : {"/opt/homebrew/bin/python3", "python", "python3", "/usr/bin/python3", "/usr/bin/python"}) {
     if (run_program(option, {"--version"}) == 0) {
       python = option;
       break;

@@ -26,7 +26,7 @@ const std::string COURSES_NOT_OFFERED_PATH = "student_output/courses_not_offered
  */
 struct Course {
   /* STUDENT TODO */ std::string title;
-  /* STUDENT TODO */ int number_of_units;
+  /* STUDENT TODO */ std::string number_of_units;
   /* STUDENT TODO */ std::string quarter;
 };
 
@@ -58,7 +58,7 @@ struct Course {
  * @param filename The name of the file to parse.
  * @param courses  A vector of courses to populate.
  */
-void parse_csv(std::string filename, std::vector<Course> courses) {
+void parse_csv(std::string filename, std::vector<Course>& courses) {
   /* (STUDENT TODO) Your code goes here... */
   std::ifstream file(filename);
   if (!file) {
@@ -73,12 +73,14 @@ void parse_csv(std::string filename, std::vector<Course> courses) {
       continue; // skip csv header 
     }
     std::vector<std::string> colVec = split(line, ',');
-    std::cout << line << std::endl;
+    //std::cout << line << std::endl;
     Course course;
     course.title = colVec.at(0);
-    course.number_of_units = std::stoi(colVec.at(1));
+    course.number_of_units = colVec.at(1);
     course.quarter = colVec.at(2);
+    courses.push_back(course);
   }
+  //std::cout << courses.size() << std::endl;
   file.close();
 }
 
@@ -109,13 +111,17 @@ void write_courses_offered(std::vector<Course> all_courses) {
       std::cerr << "can not open file：" << COURSES_OFFERED_PATH << std::endl;
       return;
   }
-  for (Course course : all_courses) {
+  if (!all_courses.empty()) {
+    outFile << "Title,Number of Units,Quarter" << std::endl;
+  }
+  for (Course course : all_courses) {  
     if (course.quarter == "null") {
       continue;
     }
+  
     outFile << course.title << "," << course.number_of_units <<","<< course.quarter << std::endl;
   }
-   outFile.close();
+  outFile.close();
 }
 
 /**
@@ -140,6 +146,10 @@ void write_courses_not_offered(std::vector<Course> unlisted_courses) {
       std::cerr << "can not open file：" << COURSES_NOT_OFFERED_PATH << std::endl;
       return;
   }
+  if (!unlisted_courses.empty()) {
+    outFile << "Title,Number of Units,Quarter" << std::endl;
+  }
+
   for (Course course : unlisted_courses) {
     if (course.quarter == "null") {
       outFile << course.title << "," << course.number_of_units <<","<< course.quarter << std::endl;
@@ -158,7 +168,7 @@ int main() {
 
   /* Uncomment for debugging... */
   // print_courses(courses);
-
+    
   write_courses_offered(courses);
   write_courses_not_offered(courses);
 
