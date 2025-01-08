@@ -1,3 +1,5 @@
+<img src="docs/header.png" width="100%" />
+
 # Assignment 0: Setup!
 
 Due Friday, January 17th at 11:59PM
@@ -263,7 +265,7 @@ which will actually run the `main` function in `main.cpp`. This will execute you
 > ./main.exe
 > ```
 
-## 🚀 Submission Instructions
+# 🚀 Submission Instructions
 
 After compiling and running, if your autograder looks like this:
 
