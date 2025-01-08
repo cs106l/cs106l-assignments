@@ -4,7 +4,7 @@ Due Friday, January 17th at 11:59PM
 
 ## Overview
 
-Welcome to CS106L! This assignment will get you setup for the rest of the quarter so that setup for the rest of the assignments is simple and smooth. By the end of this assignment, you should be able to compile and run C++ files and then run the autograder, which you'll do for each of the remaining assignments!
+Welcome to CS106L! This assignment will get you setup for the rest of the quarter so that setup for the rest of the assignments is simple and smooth. By the end of this assignment, you should be able to compile and run C++ files from VSCode and run the autograder, which you'll be doing for each of the remaining assignments!
 
 If you run into any issues during setup, please reach out to us on [EdStem](https://edstem.org/us/courses/72089/discussion) or come to our office hours!
 
@@ -56,7 +56,7 @@ These instructions are for Debian-based distributions, like Ubuntu. Tested on Ub
     python3 --version
     ```
 
-## Part 2: Setup VSCode
+## Part 2: Setup VSCode and C++ Compiler
 
 You will use VSCode to write C++ code for this class. Below are instructions to setup VSCode along with the GCC compiler for your machine.
 
@@ -69,6 +69,8 @@ and download Visual Studio Code for Mac. Follow the instructions on this webpage
 section **Installation**.
 
 Inside VSCode, head to the extensions tab <img src="docs/vscode-extensions.png" display="inline" height="20px"></img> and search for **C/C++**. Click on the **C/C++** extension, and then click **Install**.
+
+Finally, open the command palette (<kbd>Cmd+Shift+P</kbd>), search for `Shell Command: Install 'code' command in PATH`, and select it. This will allow you to launch VSCode directly from the terminal by running the `code` command.
 
 **🥳 At this point you should successfully have VSCode on your Mac 👏**
 
@@ -153,6 +155,8 @@ and download Visual Studio Code for Linux. Follow the instructions on this webpa
 
 Inside VSCode, head to the extensions tab <img src="docs/vscode-extensions.png" display="inline" height="20px"></img> and search for **C/C++**. Click on the **C/C++** extension, and then click **Install**.
 
+Finally, open the command palette (<kbd>Ctrl+Shift+P</kbd>), search for `Shell Command: Install 'code' command in PATH`, and select it. This will allow you to launch VSCode directly from the terminal by running the `code` command.
+
 **🥳 At this point you should successfully have VSCode on your Linux machine 👏**
 
 #### Step Two: Installing a C++ Compiler
@@ -181,9 +185,15 @@ Inside VSCode, head to the extensions tab <img src="docs/vscode-extensions.png" 
     g++ --version
     ```
 
-## Cloning the class code via Git!
+## Part 3: Cloning the class code via Git!
 
-Git is a popular VCS (version control system) that we will use to distribute starter codes for the assignments. Git comes bundled with VSCode, so if you successfully installed VSCode, then you should already have Git installed.
+Git is a popular VCS (version control system) that we will use to distribute starter codes for the assignments. Make sure that you have Git installed by running
+
+```sh
+git --version
+```
+
+If you see anything that looks off, [download and install Git from this page](https://git-scm.com/downloads)!
 
 ### Download the starter code
 
@@ -221,7 +231,7 @@ git pull origin main
 
 You should now have the latest starter code!
 
-# Testing your setup!
+# Part 4: Testing your setup!
 
 Now we will have you compile your first C++ file and run the autograder. To run any C++ code, first you'll need to compile it. Open up a VSCode terminal (again, hit <kbd>Ctrl+\`</kbd> or go to **Terminal > New Terminal** at the top of the window). Then make sure that you are in the `assign0/` directory and run:
 

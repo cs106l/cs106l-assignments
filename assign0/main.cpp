@@ -11,7 +11,8 @@
 
 #include <iostream>
 #include <sstream>
-#include "utils.cpp"
+#include "autograder/utils.cpp"
+
 int main() {
   return run_autograder();
 }
