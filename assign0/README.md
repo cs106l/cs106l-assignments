@@ -34,7 +34,7 @@ If you get a version that is `3.8` or higher, then you're good, **you can contin
 
 #### Mac & Windows
 
-Please download the latest Python version [here](https://www.python.org/downloads/) and run the installer. **Note: on Windows, you must check `Add python.exe to PATH` in the installer**. After installing, verify that the installation worked by following the steps in **Part 1.1.**.
+Please download the latest Python version [here](https://www.python.org/downloads/) and run the installer. **Note: on Windows, you must check `Add python.exe to PATH` in the installer**. After installing, verify that the installation worked by following the steps in **Part 1.1**.
 
 #### Linux
 
@@ -60,7 +60,7 @@ These instructions are for Debian-based distributions, like Ubuntu. Tested on Ub
 
 ## Part 2: Setup VSCode and C++ Compiler
 
-You will use VSCode to write C++ code for this class. Below are instructions to setup VSCode along with the GCC compiler for your machine.
+We will use VSCode to write C++ code for this class. Below are instructions to setup VSCode along with the GCC compiler for your machine.
 
 ### Mac
 
