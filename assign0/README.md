@@ -96,7 +96,7 @@ Finally, open the command palette (<kbd>Cmd+Shift+P</kbd>), search for `Shell Co
 2. Run this command:
 
     ```sh
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     ```
 
     which will download Homebrew🍺, a package manager for Mac. Woot woot.
@@ -271,4 +271,4 @@ After compiling and running, if your autograder looks like this:
 
 ![An image showing a terminal window where the autograder has run with all tests passing](docs/autograder.png)
 
-then you have finished the assignment! Woot woot. To submit the assignment, please complete the feedback form [at this link](https://forms.gle/QNedgpAXdVHipZgYA). Once you submit the form, a link to the submission page will show up in the form submission confirmation.
+then you have finished the assignment! Woot woot. To submit the assignment, please complete the feedback form [at this link](https://forms.gle/QNedgpAXdVHipZgYA)!
