@@ -1,24 +1,16 @@
 from utils import Autograder
 
-import base64
-from colorama import Fore
-import difflib
-import pickle
-import re
 import os
 import subprocess
-import getpass
+import sys
 
 PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 AUTOGRADER_DIR = os.path.join(PATH, "autograder")
 
 def test_python_installed():
-    """Check that Python is installed."""
-    try:
-        result = subprocess.run(["python3", "--version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        assert result.returncode == 0, "Python 3 is not installed or not in PATH."
-    except FileNotFoundError:
-        raise AssertionError("Python 3 is not installed or not in PATH.")
+    """Check that the correct Python version is installed."""
+    if sys.version_info < (3, 8):
+        raise AssertionError(f"Python 3.8 not installed: current version is {sys.version_info.major}.{sys.version_info.minor}.")
 
 
 def test_cpp_compiler():
