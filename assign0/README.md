@@ -264,6 +264,20 @@ which will actually run the `main` function in `main.cpp`. This will execute you
 > ```sh
 > ./main.exe
 > ```
+> 
+
+> [!NOTE]
+>
+> ### Note for Mac
+>
+> You may get a compiler error when attempting to compile this code due to a missing `wchar.h` (or some similar file). If this happens, you may need to reinstall the Xcode command line tools on your machine by running the following commands:
+>
+> ```sh
+> sudo rm -rf /Library/Developer/CommandLineTools
+> sudo xcode-select --install
+> ```
+>
+> Afterwards, you should be able to compile normally.
 
 # 🚀 Submission Instructions
 
