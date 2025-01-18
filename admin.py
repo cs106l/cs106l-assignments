@@ -1,15 +1,22 @@
 import subprocess
-import shutil
 import os
 import argparse
 
 
 def find_last_commit_with_path(path):
+    if os.path.exists(path):
+        raise ValueError(f"Path {path} already exists!")
     try:
+        # This gives us the hash that deleted the file
         commit_hash = subprocess.check_output(
             ["git", "log", "-n", "1", "--pretty=format:%H", "--", path],
-            stderr=subprocess.DEVNULL
         ).decode("utf-8").strip()
+
+        # This gives us the hash before that one
+        commit_hash = subprocess.check_output(
+            ["git", "log", "-n", "1", "--pretty=format:%H", f"{commit_hash}^"],
+        ).decode("utf8").strip()
+
         return commit_hash
     except subprocess.CalledProcessError:
         return None
@@ -17,7 +24,6 @@ def find_last_commit_with_path(path):
 def copy_from_commit(commit_hash, path):
     os.makedirs(path, exist_ok=True)
     subprocess.run(["git", "checkout", commit_hash, "--", path])
-    shutil.copytree(path, path, dirs_exist_ok=True)
 
 
 def main():
