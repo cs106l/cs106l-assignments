@@ -1,6 +1,6 @@
 # Assignment 1: SimpleEnroll
 
-Due Friday, October 11th at 11:59PM
+Due Monday, January 27th, at 11:59PM
 
 ## Overview
 
