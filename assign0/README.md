@@ -49,7 +49,7 @@ These instructions are for Debian-based distributions, like Ubuntu. Tested on Ub
 2. Install Python:
 
     ```sh
-    sudo apt-get install python3
+    sudo apt-get install python3 python3-venv
     ```
 
 3. Restart your terminal and verify that the installation worked by running:
