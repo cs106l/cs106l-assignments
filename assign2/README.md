@@ -103,7 +103,7 @@ From here please implement the function `get_match` to find your “one true mat
 >
 > Gets your “one true match” from the queue of all possible matches. This can be determined as you see fit; choose some method of acquiring one student from the queue, ideally something with a bit more thought than a single `pop()`, but it doesn’t have to be particularly complicated! Consider random values or other methods of selection.
 >
-> If your initials have no matches in the dataset, print `“NO STUDENT FOUND.”` Better luck next year 😢
+> If your initials have no matches in the dataset, print `“NO MATCHES FOUND.”` Better luck next year 😢
 
 Afterwards, answer the following question in `short_answer.txt`:
 
