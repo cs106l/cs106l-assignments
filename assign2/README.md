@@ -14,7 +14,6 @@ These are the files you need to care about:
 
 - `main.cpp`: All your code goes here 😀!
 - `short_answer.txt`: Short answer responses go here 📝!
-- `utils.h`: You must change the functions in this file if you choose to use an `std::unordered_set`
 
 To download the starter code for this assignment, please see the instructions for [**Getting Started**](../README.md#getting-started) on the course assignments repository.
 
@@ -23,7 +22,7 @@ To download the starter code for this assignment, please see the instructions fo
 To run your code, first you'll need to compile it. Open up a terminal (if you are using VSCode, hit <kbd>Ctrl+\`</kbd> or go to **Terminal > New Terminal** at the top). Then make sure that you are in the `assign2/` directory and run:
 
 ```sh
-g++ -std=c++20 main.cpp utils.cpp -o main
+g++ -std=c++20 main.cpp -o main
 ```
 
 Assuming that your code compiles without any compiler errors, you can now do:
@@ -43,7 +42,7 @@ As you are following the instructions below, we recommend intermittently compili
 > On Windows, you may need to compile your code using
 >
 > ```sh
-> g++ -static-libstdc++ -std=c++20 main.cpp utils.cpp -o main
+> g++ -static-libstdc++ -std=c++20 main.cpp -o main
 > ```
 >
 > in order to see output. Also, the output executable may be called `main.exe`, in which case you'll run your code with:
@@ -66,7 +65,7 @@ We’ve included a `.txt` file of all of the (fictional) students who signed up 
 >
 > ### `get_applicants`
 >
-> From the `.txt` file, parse all of the names into a set. Each line contained in the file named `filename` is a single applicant's name. In your implementation, you are free to choose between an ordered (`std::set`) and unordered set (`std::unordered_set`) as you wish! If you do choose to use an unordered set, make sure to also change the relevant function definitions in `utils.h`!
+> From the `.txt` file, parse all of the names into a set. Each line contained in the file named `filename` is a single applicant's name. In your implementation, you are free to choose between an ordered (`std::set`) and unordered set (`std::unordered_set`) as you wish! If you do choose to use an unordered set, please change the relevant function definitions!
 
 Additionally, please answer the following short answer question in `short_answer.txt`:
 
@@ -120,7 +119,6 @@ Before you submit the assignment, please fill out this [short feedback form](htt
 Your deliverable should be:
 
 - `main.cpp`
-- `utils.h`
 - `short_answer.txt`
 
 You may resubmit as many times as you'd like before the deadline.
