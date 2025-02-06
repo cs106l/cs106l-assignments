@@ -1,33 +1,6 @@
-size_t levenshtein(const std::string& a, const std::string& b) {
-  size_t sa = a.size(), sb = b.size();
-  if (sa == 0)
-    return sb;
-  if (sb == 0)
-    return sa;
-
-  if (std::abs(int(sa) - int(sb)) > 1) // Early exit if length difference > 1
-    return 2;
-
-  std::vector<size_t> prev(sb + 1), curr(sb + 1);
-  for (size_t i = 0; i <= sb; ++i)
-    prev[i] = i;
-
-  for (size_t i = 1; i <= sa; ++i) {
-    curr[0] = i;
-    size_t min_edit = i;
-    for (size_t j = 1; j <= sb; ++j) {
-      size_t cost = (a[i - 1] == b[j - 1]) ? 0 : 1;
-      curr[j] = std::min({prev[j] + 1, curr[j - 1] + 1, prev[j - 1] + cost});
-      min_edit = std::min(min_edit, curr[j]);
-    }
-
-    if (min_edit >= 2)
-      return 2;
-    prev.swap(curr);
-  }
-
-  return prev[sb];
-}
+#include <algorithm>
+#include <string>
+#include <tuple>
 
 bool operator<(const Token& a, const Token& b) {
   return std::tie(a.src_offset, a.content) < std::tie(b.src_offset, b.content);
@@ -63,4 +36,47 @@ void Token::clean(const std::string& source) {
   }
 
   std::transform(content.begin(), content.end(), content.begin(), ::tolower);
+}
+
+/* ========================================================================= *
+ * Damerau-Levenshtein Distance Algorithm                                    *
+ *                                                                           *
+ * Taken from:                                                               *
+ * https://github.com/sp1ff/damerau-levenshtein                              *
+ * ========================================================================= */
+
+size_t levenshtein(const std::string& s1, const std::string& s2) {
+  /* If size differences are extreme, then we know D-L exceeds 1 */
+  size_t diff = std::abs((ptrdiff_t)s1.size() - (ptrdiff_t)s2.size());
+  if (diff > 1)
+    return diff;
+
+  /* If strings have same size, we'll count mismatches and potentially early exit */
+  if (diff == 0) {
+    size_t mismatches = std::inner_product(s1.begin(), s1.end(), s2.begin(), 0UL, std::plus<>(),
+                                           std::not_equal_to<>());
+    if (mismatches <= 1)
+      return mismatches;
+  }
+
+  /* Otherwise we run an optimized DP D-L algorithm.
+   * This will early exit if the min possible D-L distance exceeds 1 */
+  const std::size_t l1 = s1.size(), l2 = s2.size();
+  std::vector<size_t> col(l2 + 1), prevCol(l2 + 1);
+  for (size_t i = 0; i < prevCol.size(); i++)
+    prevCol[i] = i;
+  for (size_t i = 0; i < l1; i++) {
+    col[0] = i + 1;
+    size_t row_min = col[0];
+    for (size_t j = 0; j < l2; j++) {
+      col[j + 1] =
+          std::min({prevCol[1 + j] + 1, col[j] + 1, prevCol[j] + (s1[i] == s2[j] ? 0 : 1)});
+      row_min = std::min(row_min, col[j + 1]);
+    }
+    if (row_min > 1)
+      return row_min;
+    col.swap(prevCol);
+  }
+
+  return prevCol[l2];
 }

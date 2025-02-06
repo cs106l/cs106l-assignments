@@ -3,12 +3,12 @@
 #include <iostream>
 #include <iterator>
 #include <optional>
-#include <string>
-
-#include "spellcheck.h"
-
 #include <ostream>
 #include <random>
+#include <string>
+
+#include "autograder/utils.hpp"
+#include "spellcheck.h"
 
 namespace ansi {
 
@@ -102,8 +102,7 @@ void print_success() {
 
 int main(int argc, char** argv) {
   if (argc == 1) {
-    std::cerr << "No args passed" << std::endl;
-    return EXIT_FAILURE;
+    return run_autograder();
   }
 
   bool read_stdin = false;
@@ -117,7 +116,7 @@ int main(int argc, char** argv) {
       dictionary_file = argv[++i];
     } else if (arg == "--unstyled") {
       styled = false;
-    } else if (arg == "-i") {
+    } else if (arg == "--stdin") {
       read_stdin = true;
     } else {
       input += argv[i];

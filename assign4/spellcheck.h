@@ -16,6 +16,7 @@ struct Token {
     clean(source);
   }
 
+private:
   void clean(const std::string& source);
 };
 
