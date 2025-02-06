@@ -21,16 +21,23 @@ size_t levenshtein(const std::string& a, const std::string& b) {
   if (sb == 0)
     return sa;
 
+  if (std::abs(int(sa) - int(sb)) > 1) // Early exit if length difference > 1
+    return 2;
+
   std::vector<size_t> prev(sb + 1), curr(sb + 1);
   for (size_t i = 0; i <= sb; ++i)
     prev[i] = i;
 
   for (size_t i = 1; i <= sa; ++i) {
     curr[0] = i;
+    size_t min_edit = i;
     for (size_t j = 1; j <= sb; ++j) {
       size_t cost = (a[i - 1] == b[j - 1]) ? 0 : 1;
       curr[j] = std::min({prev[j] + 1, curr[j - 1] + 1, prev[j - 1] + cost});
+      min_edit = std::min(min_edit, curr[j]);
     }
+
+    if (min_edit >= 2) return 2;
     prev.swap(curr);
   }
 

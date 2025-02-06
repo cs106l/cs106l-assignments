@@ -6,18 +6,14 @@
 
 #include "spellcheck.h"
 
-class StyleGuard
-{
+class StyleGuard {
 public:
-  StyleGuard(const std::string& prefix, const std::string& suffix)
-    : suffix{ suffix }
-  {
+  StyleGuard(const std::string& prefix, const std::string& suffix) : suffix{suffix} {
     if (stylingEnabled)
       std::cout << prefix;
   }
 
-  ~StyleGuard()
-  {
+  ~StyleGuard() {
     if (stylingEnabled)
       std::cout << suffix;
   }
@@ -31,9 +27,9 @@ private:
   std::string suffix;
 };
 
-std::string
-read_stream(std::istream& is)
-{
+bool StyleGuard::stylingEnabled = true;
+
+std::string read_stream(std::istream& is) {
   std::istream_iterator<char> begin(is), end;
   return std::string(begin, end);
 }
@@ -53,31 +49,36 @@ void print_output(const std::string& source, const std::set<Mispelling>& mispell
   }
 
   std::cout << sv.substr(last_ofs) << "\n\n";
-  
+
   for (const auto& mispelling : mispellings) {
     {
       StyleGuard::highlight();
       std::cout << sv.substr(mispelling.token.src_offset, mispelling.token.src_length);
     }
-    
+
     std::cout << ": {";
 
     bool first = true;
     for (const auto& suggestion : mispelling.suggestions) {
-      if (!first) std::cout << ", ";
+      if (!first)
+        std::cout << ", ";
       std::cout << suggestion;
       first = false;
     }
-    
+
     std::cout << "}\n";
   }
 }
 
-int
-main(int argc, char** argv)
-{
-  std::optional<std::string> input;
-  std::string dictionary_file = "dictionary.txt";
+int main(int argc, char** argv) {
+  if (argc == 1) {
+    std::cerr << "No args passed" << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  bool read_stdin = false;
+  std::string input;
+  std::string dictionary_file = "words.txt";
 
   for (int i = 1; i < argc; ++i) {
     std::string arg = argv[i];
@@ -85,22 +86,27 @@ main(int argc, char** argv)
       dictionary_file = argv[++i];
     } else if (arg == "--unstyled") {
       StyleGuard::enabled(false);
-    } else if (arg == "-i" && i + 1 < argc) {
-      input = argv[++i];
+    } else if (arg == "-i") {
+      read_stdin = true;
     } else {
-      std::cerr << "No args passed" << std::endl;
-      return EXIT_FAILURE;
+      input += argv[i];
     }
   }
 
-  if (!input) input = read_stream(std::cin);
-  
+  if (read_stdin)
+    input += read_stream(std::cin);
+
   std::ifstream dict_stream(dictionary_file);
+  if (!dict_stream.is_open()) {
+    std::cerr << "Failed to open dict file '" << dictionary_file << "'" << std::endl;
+    return EXIT_FAILURE;
+  }
+
   Corpus dictionary = tokenize(read_stream(dict_stream));
-  Corpus source = tokenize(input.value());
+  Corpus source = tokenize(input);
 
   std::set<Mispelling> mispellings = spellcheck(source, dictionary);
-  print_output(input.value(), mispellings);
+  print_output(input, mispellings);
 
   return 0;
 }
