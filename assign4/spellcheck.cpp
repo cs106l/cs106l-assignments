@@ -1,51 +1,24 @@
 #include "spellcheck.h"
 
 #include <algorithm>
+#include <iostream>
 #include <numeric>
+#include <ranges>
 #include <vector>
 
-Corpus tokenize(const std::string& input) { 
-  return Corpus(); 
+template <typename Iterator, typename UnaryPred>
+std::vector<Iterator> find_all(Iterator begin, Iterator end, UnaryPred pred);
+
+Corpus tokenize(const std::string& source) {
+  /* TODO: Implement this method */
+  return Corpus();
 }
 
-std::set<Mispelling> spellcheck(const Corpus& source, const Corpus& dictionary) {
+std::set<Mispelling> spellcheck(const Corpus& source, const Dictionary& dictionary) {
+  /* TODO: Implement this method */
   return std::set<Mispelling>();
-}
+};
 
 /* Helper methods */
 
-size_t levenshtein(const std::string& a, const std::string& b) {
-  size_t sa = a.size(), sb = b.size();
-  if (sa == 0)
-    return sb;
-  if (sb == 0)
-    return sa;
-
-  if (std::abs(int(sa) - int(sb)) > 1) // Early exit if length difference > 1
-    return 2;
-
-  std::vector<size_t> prev(sb + 1), curr(sb + 1);
-  for (size_t i = 0; i <= sb; ++i)
-    prev[i] = i;
-
-  for (size_t i = 1; i <= sa; ++i) {
-    curr[0] = i;
-    size_t min_edit = i;
-    for (size_t j = 1; j <= sb; ++j) {
-      size_t cost = (a[i - 1] == b[j - 1]) ? 0 : 1;
-      curr[j] = std::min({prev[j] + 1, curr[j - 1] + 1, prev[j - 1] + cost});
-      min_edit = std::min(min_edit, curr[j]);
-    }
-
-    if (min_edit >= 2) return 2;
-    prev.swap(curr);
-  }
-
-  return prev[sb];
-}
-
-bool operator<(const Token& a, const Token& b) {
-  return std::tie(a.src_offset, a.src_length, a.content) < std::tie(b.src_offset, b.src_length, b.content);
-}
-
-bool operator<(const Mispelling& a, const Mispelling& b) { return a.token < b.token; }
+#include "utils.cpp"

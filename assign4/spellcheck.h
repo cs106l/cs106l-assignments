@@ -1,12 +1,22 @@
 #pragma once
 
-#include <string>
 #include <set>
+#include <string>
+#include <unordered_set>
 
 struct Token {
-  size_t src_offset;
-  size_t src_length;
+
   std::string content;
+  size_t src_offset;
+
+  template <typename It>
+  Token(const std::string& source, It begin, It end)
+      : src_offset{static_cast<std::size_t>(std::distance(source.begin(), begin))},
+        content{std::string(begin, end)} {
+    clean(source);
+  }
+
+  void clean(const std::string& source);
 };
 
 struct Mispelling {
@@ -15,13 +25,13 @@ struct Mispelling {
 };
 
 using Corpus = std::set<Token>;
+using Dictionary = std::unordered_set<std::string>;
 
 Corpus tokenize(const std::string& input);
-std::set<Mispelling> spellcheck(const Corpus& source, const Corpus& dictionary);
+std::set<Mispelling> spellcheck(const Corpus& source, const Dictionary& dictionary);
 
 /* Helper methods */
 
 size_t levenshtein(const std::string&, const std::string&);
 bool operator<(const Token&, const Token&);
 bool operator<(const Mispelling&, const Mispelling&);
-
