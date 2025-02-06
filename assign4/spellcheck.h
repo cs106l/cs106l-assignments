@@ -4,7 +4,8 @@
 #include <set>
 
 struct Token {
-  size_t offset;
+  size_t src_offset;
+  size_t src_length;
   std::string content;
 };
 

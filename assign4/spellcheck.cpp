@@ -29,7 +29,7 @@ size_t levenshtein(const std::string& a, const std::string& b) {
     curr[0] = i;
     for (size_t j = 1; j <= sb; ++j) {
       size_t cost = (a[i - 1] == b[j - 1]) ? 0 : 1;
-      curr[j] = std::min(prev[j] + 1, curr[j - 1] + 1, prev[j - 1] + cost);
+      curr[j] = std::min({prev[j] + 1, curr[j - 1] + 1, prev[j - 1] + cost});
     }
     prev.swap(curr);
   }
@@ -38,7 +38,7 @@ size_t levenshtein(const std::string& a, const std::string& b) {
 }
 
 bool operator<(const Token& a, const Token& b) {
-  return std::tie(a.offset, a.content) < std::tie(b.offset, b.content);
+  return std::tie(a.src_offset, a.src_length, a.content) < std::tie(b.src_offset, b.src_length, b.content);
 }
 
 bool operator<(const Mispelling& a, const Mispelling& b) { return a.token < b.token; }
