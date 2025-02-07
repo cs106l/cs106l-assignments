@@ -4,6 +4,7 @@
 #include <iostream>
 #include <numeric>
 #include <ranges>
+#include <set>
 #include <vector>
 
 template <typename Iterator, typename UnaryPred>
