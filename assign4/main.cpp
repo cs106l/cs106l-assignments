@@ -10,43 +10,6 @@
 #include "autograder/utils.hpp"
 #include "spellcheck.h"
 
-namespace ansi {
-
-const int style_idx = std::ios_base::xalloc();
-
-template <class CharT, class Traits>
-constexpr std::basic_ostream<CharT, Traits>& styled(std::basic_ostream<CharT, Traits>& os) {
-  os.iword(style_idx) = 1;
-  return os;
-}
-
-template <class CharT, class Traits>
-constexpr std::basic_ostream<CharT, Traits>& unstyled(std::basic_ostream<CharT, Traits>& os) {
-  os.iword(style_idx) = 0;
-  return os;
-}
-
-#define make_style(NAME, VALUE)                                                                    \
-  template <class CharT, class Traits>                                                             \
-  constexpr std::basic_ostream<CharT, Traits>& NAME(std::basic_ostream<CharT, Traits>& os) {       \
-    if (os.iword(style_idx) > 0)                                                                   \
-      os << VALUE;                                                                                 \
-    return os;                                                                                     \
-  }
-
-make_style(reset, "\033[0m");
-make_style(fg_red, "\033[31m");
-make_style(fg_lightred, "\033[91m");
-make_style(fg_green, "\033[92m");
-make_style(fg_gray, "\033[90m");
-
-} // namespace ansi
-
-std::string read_stream(std::istream& is) {
-  std::istreambuf_iterator<char> begin(is), end;
-  return std::string(begin, end);
-}
-
 void print_output(const std::string& source, const std::set<Mispelling>& mispellings) {
   std::string_view sv(source);
   size_t last_ofs = 0;

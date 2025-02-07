@@ -23,19 +23,20 @@ EXAMPLES_GOLD_PATH = os.path.join(AUTOGRADER_DIR, "gold")
 
 FUNCTION_MATCHERS: Dict[str, Iterable[Union[str, Iterable[str]]]] = {
     "tokenize": [
-        "find_all", 
-        "std::transform", 
-        "std::remove_if", 
-        "std::back_inserter", 
-        "#noloops"
+        "find_all",
+        "std::transform",
+        "std::remove_if",
+        "std::back_inserter",
+        "#noloops",
     ],
     "spellcheck": [
         ["std::ranges::views::filter", "rv::filter"],
         ["std::ranges::views::transform", "rv::transform"],
         "levenshtein",
-        "#noloops"
-    ]
+        "#noloops",
+    ],
 }
+
 
 def remove_comments_strings(content):
     comment_pattern = r"(\".*?\"|\'.*?\')|(/\*.*?\*/|//[^\r\n]*$)"
@@ -54,24 +55,25 @@ def remove_comments_strings(content):
 def tokenize_source(input_code: str) -> Iterable[str]:
     tokens = []
 
-    pattern_fqn = re.compile(r'^(::)?[a-zA-Z_][a-zA-Z0-9_]*(::[a-zA-Z_][a-zA-Z0-9_]*)*')
-    pattern_non_word = re.compile(r'^\W+')
+    pattern_fqn = re.compile(r"^(::)?[a-zA-Z_][a-zA-Z0-9_]*(::[a-zA-Z_][a-zA-Z0-9_]*)*")
+    pattern_non_word = re.compile(r"^\W+")
 
     while input_code:
         fqn_match = pattern_fqn.match(input_code)
         if fqn_match:
             tokens.append(fqn_match.group().strip())
-            input_code = input_code[len(fqn_match.group()):]
+            input_code = input_code[len(fqn_match.group()) :]
         else:
             non_word_match = pattern_non_word.match(input_code)
             if non_word_match:
                 tokens.append(non_word_match.group().strip())
-                input_code = input_code[len(non_word_match.group()):]
+                input_code = input_code[len(non_word_match.group()) :]
             else:
                 tokens.append(input_code[0])
                 input_code = input_code[1:]
 
     return [t for t in tokens if t]
+
 
 def parse_methods(file_path):
     with open(file_path, "r") as file:
@@ -130,8 +132,11 @@ def add_matcher_tests(grader: Autograder, file: str):
 
                 for matcher in matchers_copy:
                     if matcher == "#noloops":
-                        if "for" in method_body or "while" in method_body:
-                            raise RuntimeError(f"Method {method_copy} may not contain any explicit loops! You must use the STL instead!")
+                        for loop_type in ["for", "while", "goto"]:
+                            if loop_type in method_body:
+                                raise RuntimeError(
+                                    f"Method {method_copy} may not contain any explicit for/while loops! You must use the STL instead! Found loop: {loop_type}"
+                                )
                         print(f"🔎 {method_copy} has no for/while loops!")
                         continue
 
@@ -157,9 +162,13 @@ def add_matcher_tests(grader: Autograder, file: str):
         expected = set(FUNCTION_MATCHERS.keys())
         extra = present - expected
         if extra:
-            raise RuntimeError(f"You may not use any helper functions for this assignment. You must implement all your code in the following functions: {', '.join(expected)}. \n\nFound extra functions: {', '.join(extra)}")
+            raise RuntimeError(
+                f"You may not use any helper functions for this assignment. You must implement all your code in the following functions: {', '.join(expected)}. \n\nFound extra functions: {', '.join(extra)}"
+            )
 
-    grader.add_part("Check submission has no helper functions", test_no_helper_functions)
+    grader.add_part(
+        "Check submission has no helper functions", test_no_helper_functions
+    )
 
 
 def no_obvious_namespace_std():
@@ -182,13 +191,17 @@ def no_obvious_namespace_std():
 import os
 import subprocess
 
+
 def find_executable(containing_dir):
     # Search for the executable in the given directory
     for filename in ("main", "main.exe"):
         exe_path = os.path.join(containing_dir, filename)
         if os.path.isfile(exe_path) and os.access(exe_path, os.X_OK):
             return exe_path
-    raise FileNotFoundError(f"No executable named 'main' or 'main.exe' found in '{containing_dir}'.")
+    raise FileNotFoundError(
+        f"No executable named 'main' or 'main.exe' found in '{containing_dir}'."
+    )
+
 
 def spellcheck(file_path):
     exe_path = find_executable(PATH)
@@ -200,10 +213,11 @@ def spellcheck(file_path):
             stdin=file,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            text=True
+            text=True,
         )
 
     return result.stdout
+
 
 def generate_gold_dir():
     if os.path.exists(EXAMPLES_GOLD_PATH):
@@ -244,10 +258,16 @@ def assert_contents_equal(expected, actual, filename):
         diff_output = "\n".join(diff)
 
         def matcher(fore):
-            return lambda match: f"{fore}{Style.BRIGHT}{match.group(0)}{Style.RESET_ALL}"
+            return (
+                lambda match: f"{fore}{Style.BRIGHT}{match.group(0)}{Style.RESET_ALL}"
+            )
 
-        diff_output = re.sub(r"^\s*-+", matcher(Fore.RED), diff_output, flags=re.MULTILINE)
-        diff_output = re.sub(r"^\s*\++", matcher(Fore.GREEN), diff_output, flags=re.MULTILINE)
+        diff_output = re.sub(
+            r"^\s*-+", matcher(Fore.RED), diff_output, flags=re.MULTILINE
+        )
+        diff_output = re.sub(
+            r"^\s*\++", matcher(Fore.GREEN), diff_output, flags=re.MULTILINE
+        )
 
         error_lines = [
             f"Contents do not match solution:",
@@ -257,10 +277,11 @@ def assert_contents_equal(expected, actual, filename):
             "",
             f'\t\t ./main --stdin < "examples/{filename}"',
             "",
-            f"\tTo see the expected solution output, open \"autograder/gold/{filename}\"{Fore.RESET}"
+            f'\tTo see the expected solution output, open "autograder/gold/{filename}"{Fore.RESET}',
         ]
 
         raise RuntimeError("\n".join(error_lines))
+
 
 def test_spellcheck():
     for example_file in os.listdir(EXAMPLES_GOLD_PATH):
@@ -268,8 +289,10 @@ def test_spellcheck():
         input_path = os.path.join(EXAMPLES_PATH, example_file)
 
         if not os.path.isfile(input_path):
-            raise RuntimeError(f"Could not find gold file for example '{example_file}'. Did you modify the examples/ directory?")
-        
+            raise RuntimeError(
+                f"Could not find gold file for example '{example_file}'. Did you modify the examples/ directory?"
+            )
+
         with open(gold_path, "r", encoding="utf-8") as f:
             gold_output = f.read()
 
@@ -287,7 +310,7 @@ if __name__ == "__main__":
     if "--gold" in sys.argv:
         generate_gold_dir()
         sys.exit(0)
-    
+
     grader = Autograder()
     grader.setup = no_obvious_namespace_std
     add_matcher_tests(grader, CODE_PATH)

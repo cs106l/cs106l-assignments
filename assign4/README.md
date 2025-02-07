@@ -260,7 +260,87 @@ Here's a step-by-step guide to implement this algorithm:
     ```
     <sup>Note: this is just one approach: your solution may look different if you choose to use the `transform(r, func)` overload or if you don't use a `namespace rv` alias.</sup>
     
-    What should we put for `/* A lambda function taking a Token -> Mispelling */`? For a each mispelled `token` in `view`, our goal is to generate a `Mispelling` object that contains all of the suggested alternate spellings for `token`. To identify suggestions, we will search through `dictionary` for 
+    What should we put for `/* A lambda function taking a Token -> Mispelling */`? We should replace it with a lambda function that takes in a `Token` object and produces a `Mispelling` object that contains all of the suggested alternate spellings for `token`. To identify suggestions, we will search through `dictionary` for all the words whose Damerau-Levenshtein distance to `token.content` is exactly `1`. To find the Damerau-Levenshtein distance, you can use the provided `levenshtein` function.
+
+    > 📄 **`levenshtein`**  
+    > ```cpp
+    > size_t levenshtein(const std::string& a, const std::string& b);
+    > ```
+    >
+    > Returns the Damerau-Levenshtein distance between `a` and `b`. Roughly speaking, this represents the number of modifications that must be performed to `a` in order to arrive at `b`. In reality, this function implements a version of the Damerau-Levenshtein distance optimized for our purposes which will early exit if at any point the computed distance would be greater than `1`. 
+
+    Note that going through `dictionary` and finding suggestions should happen for *each* mispelled word. **That means that you will need to nest another `std::ranges::views::filter` call inside the `/* A lambda function taking a Token -> Mispelling */`.** To construct the `std::set` of suggestions, you will need to materialize the nested view of suggested words into a set, triggering the lazy evaluation, using [overload (4) of the `std::set` constructor](https://en.cppreference.com/w/cpp/container/set/set).
+
+    > [📄 **`std::set`**](https://en.cppreference.com/w/cpp/ranges/transform_view)  
+    > ```cpp
+    > template <class InputIt>
+    > set(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator());
+    > ```
+    >
+    > Creates a `set` from a range of elements between two iterators, `first` and `last`.
+
+    For example, the following code could be used to materialize a view into a set:
+
+    ```cpp
+    auto view = dictionary | rv::filter(/* A lambda function predicate */);
+    auto suggestions = std::set<std::string>(view.begin(), view.end());
+    ```
+
+    Lastly, to create a `Mispelling` object from a `token` and a set of `suggestions`, we can use uniform initialization:
+
+    ```cpp
+    Mispelling { token, suggestions }
+    ```
+
+3. **Step Three: Drop misspellings with no suggestions.**  
+    At this point, `view` contains all of our mispelled words with their suggestions: it is a view over a collection of `Mispelling` objects. However, some of these `Mispelling` objects won't have any suggestions. For example, the gibberish word `"adskadnfknfs"` is definitely mispelled, but there's no word in the dictionary that is one away from it. We would like to remove these empty mispellings from our view before returning them.
+
+    Once again, we can apply `std::ranges::views::filter` to `view`. You should have all the information you need to do this! After you filter the empty mispellings, you'll want to materialize `view` into an `std::set<Mispelling>` and return it, which you can do through similar process described for `suggestions` in Part Two above!
+
+    > [**⚠️ `std::ranges::to`**](https://en.cppreference.com/w/cpp/ranges/to)  
+    > You might remember that we used `std::ranges::to` in lecture to materialize a view of `char` into an `std::string`:
+    > ```cpp
+    > auto v = s | rv::filter(isalpha)
+    >            | /* Some other steps */
+    >            | std::ranges::to<std::string>();
+    > ```
+    > You might be tempted to do something similar here with `std::ranges::to<std::set<Mispelling>>()`. This is a good idea! But the `std::ranges::to` method was only recently introduced in C++23. Depending on the version of compiler yolu are using, this code may compile or it may not! To be safe, and to make sure that your code compiles when we run it through the autograder on our end, please use the `std::set<Mispelling>` constructor with iterators. **In general, please only use C++ features up through C++20 for this assignment.**
+
+If you have implemented everything correctly up to this point, you should have a fully functioning spellchecker now! To test it out, try re-compiling and running:
+
+```sh
+./main "This string is mispelled"
+```
+
+and you should see output like this:
+
+<p align="center">
+  <img src="docs/mispelled.png" alt="An example terminal run of the spellcheck program" />
+</p>
+
+We encourage you to play around with the spellcheck program and see what interesting behaviours you find. Below is the full usage string:
+
+
+## 🚀 Submission Instructions
+
+To fully test your spellchecker, try re-compiling and running the autograder:
+
+```sh
+./main
+```
+
+If you pass all tests, you are ready to submit! Before you submit the assignment, please fill out this [short feedback form](https://forms.gle/GpYLMocRHsgCfL6k8). **Completion of the form is required to receive credit for the assignment.** After filling out the form, please upload the files to Paperless under the correct assignment heading.
+
+Your deliverable should be:
+
+* `class.h`
+* `class.cpp`
+* `sandbox.cpp`
+* `short_answer.txt`
+
+You may resubmit as many times as you'd like before the deadline.
+
+
 
 
 
