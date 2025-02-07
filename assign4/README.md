@@ -90,7 +90,7 @@ Here's a step-by-step guide you can follow to accomplish this:
 
     We can get a vector of all the iterators to whitespace character by calling `find_all` on our `source` string and passing in a unary predicate that checks if a character is whitespace. We thankfully have such a function built-in to C++: it is called `isspace`.
 
-    > 📄 **`isspace`**
+    > 📄 **`isspace`**  
     > When passing `isspace` to `find_all`, we must pass it as `isspace` and not `std::isspace`. This is because there are actually multiple versions of the `isspace` method:
     >
     > ```cpp
