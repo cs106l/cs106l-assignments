@@ -1,3 +1,5 @@
+import difflib
+from colorama import Back, Fore, Style
 from utils import Autograder
 
 from typing import Dict, Iterable, List, Tuple, Union
@@ -130,7 +132,7 @@ def add_matcher_tests(grader: Autograder, file: str):
                     if matcher == "#noloops":
                         if "for" in method_body or "while" in method_body:
                             raise RuntimeError(f"Method {method_copy} may not contain any explicit loops! You must use the STL instead!")
-                        print(f"🔎 {method_copy} has no visible loops!")
+                        print(f"🔎 {method_copy} has no for/while loops!")
                         continue
 
                     if isinstance(matcher, str):
@@ -157,7 +159,7 @@ def add_matcher_tests(grader: Autograder, file: str):
         if extra:
             raise RuntimeError(f"You may not use any helper functions for this assignment. You must implement all your code in the following functions: {', '.join(expected)}. \n\nFound extra functions: {', '.join(extra)}")
 
-    grader.add_part("No helper functions", test_no_helper_functions)
+    grader.add_part("Check submission has no helper functions", test_no_helper_functions)
 
 
 def no_obvious_namespace_std():
@@ -223,6 +225,60 @@ def generate_gold_dir():
             print(f"Failed to process {example_file}: {e}")
 
 
+def assert_contents_equal(expected, actual, filename):
+    if expected != actual:
+        expected_lines = expected.split("\n")
+        actual_lines = actual.split("\n")
+
+        diff = list(
+            difflib.unified_diff(
+                expected_lines,
+                actual_lines,
+                fromfile="Expected in solution, missing in your output",
+                tofile="Present in your output, missing in solution",
+            )
+        )
+
+        diff = [f"\t{l}" for l in diff]
+        diff[0] = diff[0].rstrip()
+        diff_output = "\n".join(diff)
+
+        def matcher(fore):
+            return lambda match: f"{fore}{Style.BRIGHT}{match.group(0)}{Style.RESET_ALL}"
+
+        diff_output = re.sub(r"^\s*-+", matcher(Fore.RED), diff_output, flags=re.MULTILINE)
+        diff_output = re.sub(r"^\s*\++", matcher(Fore.GREEN), diff_output, flags=re.MULTILINE)
+
+        error_lines = [
+            f"Contents do not match solution:",
+            diff_output,
+            "",
+            f"\t{Fore.CYAN}To see the output of your submission on this file, run:",
+            "",
+            f'\t\t ./main --stdin < "examples/{filename}"',
+            "",
+            f"\tTo see the expected solution output, open \"autograder/gold/{filename}\"{Fore.RESET}"
+        ]
+
+        raise RuntimeError("\n".join(error_lines))
+
+def test_spellcheck():
+    for example_file in os.listdir(EXAMPLES_GOLD_PATH):
+        gold_path = os.path.join(EXAMPLES_GOLD_PATH, example_file)
+        input_path = os.path.join(EXAMPLES_PATH, example_file)
+
+        if not os.path.isfile(input_path):
+            raise RuntimeError(f"Could not find gold file for example '{example_file}'. Did you modify the examples/ directory?")
+        
+        with open(gold_path, "r", encoding="utf-8") as f:
+            gold_output = f.read()
+
+        spellcheck_result = spellcheck(input_path)
+
+        assert_contents_equal(gold_output, spellcheck_result, example_file)
+        print(f"🔎 {example_file} spellcheck matched solution!")
+
+
 # =============================================================================
 # Autograder setup
 # =============================================================================
@@ -235,4 +291,5 @@ if __name__ == "__main__":
     grader = Autograder()
     grader.setup = no_obvious_namespace_std
     add_matcher_tests(grader, CODE_PATH)
+    grader.add_part("Spellcheck", test_spellcheck)
     grader.run()

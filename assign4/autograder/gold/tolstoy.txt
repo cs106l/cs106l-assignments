@@ -1,3 +1,6 @@
+Loading dictionary... loaded 464811 words.
+Tokenizing input... got 66 tokens.
+
 All happy families are alike; each unhappy family is unhappy in its own way.
 
 Everything was in confusion in the Oblonskys' house. The wife had discovered 

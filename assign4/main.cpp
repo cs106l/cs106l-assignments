@@ -38,6 +38,7 @@ make_style(reset, "\033[0m");
 make_style(fg_red, "\033[31m");
 make_style(fg_lightred, "\033[91m");
 make_style(fg_green, "\033[92m");
+make_style(fg_gray, "\033[90m");
 
 } // namespace ansi
 
@@ -53,9 +54,9 @@ void print_output(const std::string& source, const std::set<Mispelling>& mispell
     // Print text before the mispelling
     std::cout << sv.substr(last_ofs, mispelling.token.src_offset - last_ofs);
 
-    std::cout << ansi::fg_red << "«";
+    std::cout << ansi::fg_red << "<<";
     std::cout << sv.substr(mispelling.token.src_offset, mispelling.token.content.size());
-    std::cout << "»" << ansi::reset;
+    std::cout << ">>" << ansi::reset;
     last_ofs = mispelling.token.src_offset + mispelling.token.content.size();
   }
 
@@ -137,6 +138,8 @@ int main(int argc, char** argv) {
     return EXIT_FAILURE;
   }
 
+  std::cout << ansi::fg_gray << "Loading dictionary... ";
+
   std::string dict_contents = read_stream(dict_stream);
   Corpus dictionary_tokens = tokenize(dict_contents);
 
@@ -144,7 +147,13 @@ int main(int argc, char** argv) {
   std::for_each(dictionary_tokens.begin(), dictionary_tokens.end(),
                 [&](const Token& t) { dictionary.insert(t.content); });
 
+  std::cout << "loaded " << dictionary.size() << " words." << std::endl;
+  std::cout << "Tokenizing input... ";
+
   Corpus source = tokenize(input);
+
+  std::cout << "got " << source.size() << " tokens." << ansi::reset << "\n\n";
+
   std::set<Mispelling> mispellings = spellcheck(source, dictionary);
   print_output(input, mispellings);
 
