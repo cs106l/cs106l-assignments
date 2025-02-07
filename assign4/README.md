@@ -52,7 +52,7 @@ As you are following the instructions below, we recommend intermittently compili
 
 ## Building Ispell
 
-The classic Unix program Ispell works as follows. First, a dictionary is loaded into memory containing all of the common English words. Then, each word in the input is compared to each word in the dictionary. A word is mispelled if it can't be found in the dictionary. Then, suggestions for the mispelled word are found using the [Damerau-Levenshtein distance](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance), which tells you approximately how many edits (consisting of insertions, deletions or substitutions of a single character, or swapping two adjacent characters) must be done to change one word into the other. If the Damerau-Levenshtein distance is exactly one between the mispelled word and one of the dictionary words, then it is added to the list of suggestions. The idea here is that when one mispells a word, usually they are only off by one small change (for example, consider "stopping" vs. "stoping").
+The classic Unix program Ispell works as follows. First, a dictionary is loaded into memory containing all of the common English words. Then, each word in the input is compared to each word in the dictionary. A word is mispelled if it can't be found in the dictionary. Then, suggestions for each mispelled word are found using the [Damerau-Levenshtein distance](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) algorithm, which tells you approximately how many edits (consisting of insertions, deletions or substitutions of a single character, or swapping two adjacent characters) must be done to change one word into the other. If the Damerau-Levenshtein distance is exactly one between the mispelled word and one of the dictionary words, then it is added to the list of suggestions. The idea here is that when one mispells a word, usually they are only off by one small change (for example, consider "stopping" vs. "stoping").
 
 In this assignment, we have given you all the infrastructure to build this spellchecker, including implementations of the Damerau-Levenshtein function. Your job will be to implement the core of the algorithm that spellchecks words. Specifically, you will write an algorithm that splits an input string into a set of tokens (`tokenize`), and another algorithm that actually identifies mispelled words given a (tokenized) input string and a dictionary (`spellcheck`). To add a bit of an extra challenge (and to make this relevant to the last week's lectures), there's a catch: you can't use any for/while loops in your code or helper functions. You must implement these tasks entirely using the STL: `tokenize` using the traditional STL algorithms, and `spellcheck` using the brand new ranges library. In the process, you will get exposure to how we can manipulate modern data structures in C++ using algorithms and lambda functions.
 
@@ -80,7 +80,7 @@ Here's a step-by-step guide you can follow to accomplish this:
 1. **Step One: Identify all iterators to space characters**  
     If we can get all iterators in the string pointing to whitespace characters, then we can more-or-less think of the tokens present in the string as the characters between any two whitespace characters. We almost want to call `find_if` multiple times to collect all of iterators to whitespace characters. Fortunately, we have provided you with a method to do just that, `find_all`.
 
-    > [!NOTE]
+    > 📄 **`find_all`**
     > ```cpp
     > template <typename Iterator, typename UnaryPred>
     > std::vector<Iterator> find_all(Iterator begin, Iterator end, UnaryPred pred);
@@ -90,7 +90,7 @@ Here's a step-by-step guide you can follow to accomplish this:
 
     We can get a vector of all the iterators to whitespace character by calling `find_all` on our `source` string and passing in a unary predicate that checks if a character is whitespace. We thankfully have such a function built-in to C++: it is called `isspace`.
 
-    > [!NOTE]
+    > 📄 **`isspace`**
     > When passing `isspace` to `find_all`, we must pass it as `isspace` and not `std::isspace`. This is because there are actually multiple versions of the `isspace` method:
     >
     > ```cpp
@@ -116,7 +116,7 @@ Here's a step-by-step guide you can follow to accomplish this:
 
     The arrows represent the return value of `find_all`, and as you can see, the tokens can be found between the arrows. Don't worry whether or not the iterator actually does point to whitespace or not—`Token` has a constructor that takes in a pair of iterators and automatically handles trimming whitespace around the edges.
 
-    > [!NOTE]
+    > 📄 **`Token`**
     > ```cpp
     > template <typename It>
     > Token(const std::string& source, It begin, It end);
@@ -126,10 +126,10 @@ Here's a step-by-step guide you can follow to accomplish this:
 
     We need to somehow call this constructor for each pair of consecutive iterators. To do this, we will use [overload (3) of `std::transform`](https://en.cppreference.com/w/cpp/algorithm/transform).
 
-    > [!NOTE]
+    > 📄 **`std::transform`**
     > ```cpp
     > template <class InputIt1, class InputIt2, class OutputIt, class BinaryOp>
-    > OutputIt transform( InputIt1 first1, InputIt1 last1, InputIt2 first2,
+    > OutputIt std::transform( InputIt1 first1, InputIt1 last1, InputIt2 first2,
     >               OutputIt d_first, BinaryOp binary_op );
     > ```
     > 
@@ -139,7 +139,7 @@ Here's a step-by-step guide you can follow to accomplish this:
 
     For the output range (`d_first`), we will first create a `std::set<Token>` to store the tokens that we find. Suppose we call that variables `tokens`. Then, we can create an [`std::inserter(tokens, tokens.end())`](https://en.cppreference.com/w/cpp/iterator/inserter) to store the resulting tokens to.
 
-    > [!NOTE]
+    > 📄 **`std::inserter`**
     > ```cpp
     > template <class Container>
     > std::insert_iterator<Container> inserter(Container& c, typename Container::iterator i);
@@ -152,7 +152,7 @@ Here's a step-by-step guide you can follow to accomplish this:
 3. **Step Three: Get rid of empty tokens**  
     Some of the tokens we've produced so far will only consist of whitespace (for example, what if there were multiple consecutive whitespace characters in our string). We will need to remove these characters. Luckily, there is a [`std::erase_if` function](https://en.cppreference.com/w/cpp/container/set/erase_if) that can remove elements from an `std::set` which match some condition.
 
-    > [!NOTE]
+    > 📄 **`std::erase_if`**
     > ```cpp
     > template <class Key, class Compare, class Alloc, class Pred>
     > std::set<Key, Compare, Alloc>::size_type erase_if (std::set<Key, Compare, Alloc>& c, Pred pred);
