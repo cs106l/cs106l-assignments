@@ -312,7 +312,7 @@ Here's a step-by-step guide to implement this algorithm:
 
     Once again, we can apply `std::ranges::views::filter` to `view`. You should have all the information you need to do this! After you filter the empty mispellings, you'll want to materialize `view` into an `std::set<Mispelling>` and return it, which you can do through similar process described for `suggestions` in Part Two above!
 
-    > [**⚠️ `std::ranges::to`**](https://en.cppreference.com/w/cpp/ranges/to)  
+    > **⚠️ [`std::ranges::to`**](https://en.cppreference.com/w/cpp/ranges/to)  
     > You might remember that we used `std::ranges::to` in lecture to materialize a view of `char` into an `std::string`:
     > ```cpp
     > auto v = s | rv::filter(isalpha)
