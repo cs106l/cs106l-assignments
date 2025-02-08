@@ -1,4 +1,4 @@
-Loading dictionary... loaded 464811 words.
+Loading dictionary... loaded 464811 unique words.
 Tokenizing input... got 55 tokens.
 
 It was a bright cold day in April, and the clocks were striking thirteen. 

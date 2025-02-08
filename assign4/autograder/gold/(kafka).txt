@@ -1,4 +1,4 @@
-Loading dictionary... loaded 464811 words.
+Loading dictionary... loaded 464811 unique words.
 Tokenizing input... got 121 tokens.
 
 Someone must have slandered Josef K., for one morning, without having 

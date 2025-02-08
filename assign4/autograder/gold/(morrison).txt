@@ -1,4 +1,4 @@
-Loading dictionary... loaded 464811 words.
+Loading dictionary... loaded 464811 unique words.
 Tokenizing input... got 128 tokens.
 
 124 WAS SPITEFUL. Full of a <<baby's>> venom. The women in the house knew 

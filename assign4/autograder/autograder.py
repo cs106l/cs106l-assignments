@@ -25,8 +25,8 @@ FUNCTION_MATCHERS: Dict[str, Iterable[Union[str, Iterable[str]]]] = {
     "tokenize": [
         "find_all",
         "std::transform",
-        "std::remove_if",
-        "std::back_inserter",
+        "std::inserter",
+        "std::erase_if",
         "#noloops",
     ],
     "spellcheck": [

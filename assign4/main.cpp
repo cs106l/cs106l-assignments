@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
 
   for (int i = 1; i < argc; ++i) {
     std::string arg = argv[i];
-    if (arg == "-d" && i + 1 < argc) {
+    if (arg == "--dict" && i + 1 < argc) {
       dictionary_file = argv[++i];
     } else if (arg == "--unstyled") {
       styled = false;

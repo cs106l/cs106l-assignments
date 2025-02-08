@@ -74,11 +74,12 @@ constexpr std::basic_ostream<CharT, Traits>& unstyled(std::basic_ostream<CharT, 
     return os;                                                                                     \
   }
 
-make_style(reset, "\033[0m");
+make_style(reset, "\033[0m\e[0m");
 make_style(fg_red, "\033[31m");
 make_style(fg_lightred, "\033[91m");
 make_style(fg_green, "\033[92m");
 make_style(fg_gray, "\033[90m");
+make_style(bg_yellow, "\e[43m");
 
 } // namespace ansi
 
@@ -103,8 +104,9 @@ public:
   ~TimerSummary() {
     if (!enabled)
       return;
+
     std::cout << "\n";
-    std::cout << ansi::fg_red << "Timing Results:" << "\n";
+    std::cout << ansi::bg_yellow << std::left << std::setw(120) << "Timing Results:" << ansi::reset << '\n';
     std::cout << ansi::fg_gray;
     for (const auto& [name, trials, ns] : results) {
       std::cout << " · " << name << " took ";

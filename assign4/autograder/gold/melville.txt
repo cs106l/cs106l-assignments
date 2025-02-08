@@ -1,4 +1,4 @@
-Loading dictionary... loaded 464811 words.
+Loading dictionary... loaded 464811 unique words.
 Tokenizing input... got 56 tokens.
 
 Call me Ishmael. Some years ago—never mind how long precisely—having little 

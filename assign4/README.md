@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="docs/header.png" alt="Header image with the text, in a code font, [~]$ ispell, on a black background" />
+</p>
+
+
 # Assignment 4: Ispell
 
 Due Friday, February 14th at 11:59PM
@@ -18,7 +23,7 @@ To download the starter code for this assignment, please see the instructions fo
 
 ## Running your code
 
-To run your code, first you'll need to compile it. Open up a terminal (if you are using VSCode, hit <kbd>Ctrl+\`</kbd> or go to **Terminal > New Terminal** at the top). Then make sure that you are in the `assign2/` directory and run:
+To run your code, first you'll need to compile it. Open up a terminal (if you are using VSCode, hit <kbd>Ctrl+\`</kbd> or go to **Terminal > New Terminal** at the top). Then make sure that you are in the `assign4/` directory and run:
 
 ```sh
 g++ -std=c++20 main.cpp spellcheck.cpp -o main
@@ -52,9 +57,9 @@ As you are following the instructions below, we recommend intermittently compili
 
 ## Building Ispell
 
-The classic Unix program Ispell works as follows. First, a dictionary is loaded into memory containing all of the common English words. Then, each word in the input is compared to each word in the dictionary. A word is mispelled if it can't be found in the dictionary. Then, suggestions for each mispelled word are found using the [Damerau-Levenshtein distance](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) algorithm, which tells you approximately how many edits (consisting of insertions, deletions or substitutions of a single character, or swapping two adjacent characters) must be done to change one word into the other. If the Damerau-Levenshtein distance is exactly one between the mispelled word and one of the dictionary words, then it is added to the list of suggestions. The idea here is that when one mispells a word, usually they are only off by one small change (for example, consider "stopping" vs. "stoping").
+The classic Unix program Ispell works as follows. First, a dictionary is loaded into memory containing all of the common English words. A word is mispelled if it can't be found in the dictionary. Suggestions for each mispelled word are found using the [Damerau-Levenshtein distance](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) algorithm, which tells you approximately how many edits (additions, deletions or replacements of a single letter, or swapping two adjacent letters) must be done to change one word into the other. If the Damerau-Levenshtein distance is exactly one between the mispelled word and one of the dictionary words, then it is added to the list of suggestions. The idea here is that when one mispells a word, usually they are only off by one small change (for example, consider "mispelled" vs. "misspelled").
 
-In this assignment, we have given you all the infrastructure to build this spellchecker, including implementations of the Damerau-Levenshtein function. Your job will be to implement the core of the algorithm that spellchecks words. Specifically, you will write an algorithm that splits an input string into a set of tokens (`tokenize`), and another algorithm that actually identifies mispelled words given a (tokenized) input string and a dictionary (`spellcheck`). To add a bit of an extra challenge (and to make this relevant to the last week's lectures), there's a catch: you can't use any for/while loops in your code or helper functions. You must implement these tasks entirely using the STL: `tokenize` using the traditional STL algorithms, and `spellcheck` using the brand new ranges library. In the process, you will get exposure to how we can manipulate modern data structures in C++ using algorithms and lambda functions.
+In this assignment, we have given you all the infrastructure to build this spellchecker, including implementations of the Damerau-Levenshtein function. Your job will be to implement the core of the algorithm that spellchecks words. Specifically, you will write an algorithm that splits an input string into a set of tokens (`tokenize`), and another algorithm that actually identifies mispelled words given a (tokenized) input string and a dictionary (`spellcheck`). To add a bit of an extra challenge (and to make this relevant to the last week's lectures), there's a catch: you can't use any for/while loops in your code. You must implement these tasks entirely using the STL: `tokenize` using the traditional STL algorithms, and `spellcheck` using the brand new ranges library. In the process, you will get exposure to how we can manipulate modern data structures in C++ using algorithms and lambda functions.
 
 This may sound like a lot, but don't worry! This handout will walk you through each of the algorithms in detail.
 
@@ -318,7 +323,28 @@ and you should see output like this:
   <img src="docs/mispelled.png" alt="An example terminal run of the spellcheck program" />
 </p>
 
-We encourage you to play around with the spellcheck program and see what interesting behaviours you find. Below is the full usage string:
+You can also spellcheck one of the given examples:
+
+```sh
+./main --stdin < "examples/(marquez).txt"
+```
+
+> [!NOTE]  
+> We encourage you to play around with the spellcheck program and see what interesting behaviours you find. Here is the full list of options you can try:
+> 
+> ```
+> ./main [--dict dict_path] [--stdin] [--unstyled] [--profile] text
+> 
+> --dict dict_path  Sets the location of the dictionary. Defaults to words.txt
+> --stdin           Read from stdin. You can use this to pipe input from a file
+> --unstyled        Don't add any color to the output!
+> --profile         Profile the code, printing out how long tokenizing/spellcheck took
+> text              The text you want to spellcheck, if not using stdin
+> ```
+> 
+> If you are looking for an added challenge, try running your code with the `--profile` option. Our spellchecking algorithm, despite using a simple brute
+> force approach that searches through the entire dictionary of about half a million words, still runs quite quickly! Feel free to look into ways you can
+> improve the performance of this algorithm (while still having correct output)! 
 
 
 ## 🚀 Submission Instructions
@@ -329,14 +355,11 @@ To fully test your spellchecker, try re-compiling and running the autograder:
 ./main
 ```
 
-If you pass all tests, you are ready to submit! Before you submit the assignment, please fill out this [short feedback form](https://forms.gle/GpYLMocRHsgCfL6k8). **Completion of the form is required to receive credit for the assignment.** After filling out the form, please upload the files to Paperless under the correct assignment heading.
+If you pass all tests, you are ready to submit! Before you submit the assignment, please fill out this [short feedback form](https://forms.gle/TkYjcRTbRzQAGGoZ9). **Completion of the form is required to receive credit for the assignment.** After filling out the form, please upload the files to Paperless under the correct assignment heading.
 
 Your deliverable should be:
 
-* `class.h`
-* `class.cpp`
-* `sandbox.cpp`
-* `short_answer.txt`
+* `spellcheck.h`
 
 You may resubmit as many times as you'd like before the deadline.
 
