@@ -19,6 +19,9 @@ All of your code will go into `spellcheck.cpp`. Once you are done, you will have
   <img src="docs/spellcheck.png" alt="An example terminal run of the spellcheck program" />
 </p>
 
+> [!IMPORTANT]  
+> This assignment handout may look long, but there is actually not a lot of code that you need to write for this assignment! We have included a lot of extra details to make implementing this assignment (hopefully) more straightforward. Please let us know if anything confuses you (feel free to reach out on Ed/lecture/OH)! 
+
 To download the starter code for this assignment, please see the instructions for [**Getting Started**](../README.md#getting-started) on the course assignments repository.
 
 ## Running your code
