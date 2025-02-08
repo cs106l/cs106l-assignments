@@ -74,6 +74,9 @@ int main(int argc, char** argv) {
   std::string dictionary_file = "words.txt";
   bool styled = true;
 
+  TimerSummary summary;
+  summary.set_trial_noun("token");
+
   for (int i = 1; i < argc; ++i) {
     std::string arg = argv[i];
     if (arg == "-d" && i + 1 < argc) {
@@ -82,6 +85,8 @@ int main(int argc, char** argv) {
       styled = false;
     } else if (arg == "--stdin") {
       read_stdin = true;
+    } else if (arg == "--profile") {
+      summary.enable();
     } else {
       input += argv[i];
     }
@@ -104,20 +109,30 @@ int main(int argc, char** argv) {
   std::cout << ansi::fg_gray << "Loading dictionary... ";
 
   std::string dict_contents = read_stream(dict_stream);
+
+  Timer tokenize_dict_timer { summary, "Tokenizing dictionary" };
   Corpus dictionary_tokens = tokenize(dict_contents);
+  tokenize_dict_timer.stop();
+  tokenize_dict_timer.set_trials(dictionary_tokens.size());
 
   Dictionary dictionary;
   std::for_each(dictionary_tokens.begin(), dictionary_tokens.end(),
                 [&](const Token& t) { dictionary.insert(t.content); });
 
-  std::cout << "loaded " << dictionary.size() << " words." << std::endl;
+  std::cout << "loaded " << dictionary.size() << " unique words." << std::endl;
   std::cout << "Tokenizing input... ";
 
+  Timer tokenize_source_timer { summary, "Tokenizing input"};
   Corpus source = tokenize(input);
+  tokenize_source_timer.stop();
+  tokenize_source_timer.set_trials(source.size());
 
   std::cout << "got " << source.size() << " tokens." << ansi::reset << "\n\n";
 
+  Timer spellcheck_timer { summary, "Spellcheck", source.size() };
   std::set<Mispelling> mispellings = spellcheck(source, dictionary);
+  spellcheck_timer.stop();
+
   print_output(input, mispellings);
 
   if (styled && !dictionary.empty() && mispellings.empty())

@@ -88,56 +88,91 @@ std::string read_stream(std::istream& is) {
 }
 
 struct TimerResult {
-    std::string name;
-    size_t trials;
-    std::chrono::nanoseconds ns;
+  std::string name;
+  size_t trials;
+  std::chrono::nanoseconds ns;
 };
 
 class TimerSummary {
-    TimerSummary() : trial_noun{"trial"}, enabled{false} {}
-    void add(const TimerResult& result) { results.push_back(result); }
-    void set_trial_noun(std::string& trial_noun) { this->trial_noun = trial_noun; }
+public:
+  TimerSummary() : trial_noun{"trial"}, enabled{false} {}
+  void add(const TimerResult& result) { results.push_back(result); }
+  void set_trial_noun(const std::string& trial_noun) { this->trial_noun = trial_noun; }
 
-    TimerSummary& operator=(const TimerSummary&) = delete;
-    ~TimerSummary() {
-        if (!enabled) return;
-        std::cout << "\n\n";
-        
-        std::cout << ansi::fg_red << "Timing Results:" << "\n"; 
-        std::cout << ansi::fg_gray;
-        for (const auto& [name, trials, ns] : results) {
-            std::cout << "\t" << "· " << name << " took ";
-            format_time(ns);
-            std::cout << ", averaging ";
-            format_time(ns / trials);
-            std::cout << " per " << trial_noun << "\n";
-        }
-        std::cout << ansi::reset;
-    }
-
-    void enable() { enabled = true; }
-    void disable() { enabled = false; }
-private:
-    bool enabled;
-    std::string trial_noun;
-    std::vector<TimerResult> results;
-
-    void format_time(const std::chrono::nanoseconds& ns)
-    {
-      using namespace std::chrono;
-
-      if (ns < 1us) {
-        std::cout << ns.count() << "ns";
-      } else if (ns < 1s) {
-        std::cout << duration_cast<microseconds>(ns).count() / 1000.0 << "ms";
-      } else {
-        std::cout << std::fixed << std::setprecision(3)
-                  << duration_cast<milliseconds>(ns).count() / 1000.0 << "s"
-                  << std::defaultfloat;
+  TimerSummary& operator=(const TimerSummary&) = delete;
+  ~TimerSummary() {
+    if (!enabled)
+      return;
+    std::cout << "\n";
+    std::cout << ansi::fg_red << "Timing Results:" << "\n";
+    std::cout << ansi::fg_gray;
+    for (const auto& [name, trials, ns] : results) {
+      std::cout << " · " << name << " took ";
+      format_time(ns);
+      if (trials > 1) {
+        std::cout << ", averaging ";
+        format_time(ns / trials);
+        std::cout << " per " << trial_noun;
       }
+      std::cout << " (" << trials << " token";
+      if (trials != 1) std::cout << "s";
+      std::cout << ")\n";
     }
+    std::cout << ansi::reset;
+  }
+
+  void enable() { enabled = true; }
+  void disable() { enabled = false; }
+
+private:
+  bool enabled;
+  std::string trial_noun;
+  std::vector<TimerResult> results;
+
+  void format_time(const std::chrono::nanoseconds& ns) {
+    using namespace std::chrono;
+
+    if (ns < 10us) {
+      std::cout << ns.count() << "ns";
+    } else if (ns < 1s) {
+      std::cout << std::fixed << std::setprecision(2)
+                << duration_cast<microseconds>(ns).count() / 1000.0 << "ms" << std::defaultfloat;
+    } else {
+      std::cout << std::fixed << std::setprecision(3)
+                << duration_cast<milliseconds>(ns).count() / 1000.0 << "s" << std::defaultfloat;
+    }
+  }
 };
 
 class Timer {
+public:
+  Timer(TimerSummary& summary, const std::string& name, size_t trials = 1)
+      : summary{summary}, name{name}, trials{trials},
+        start{std::chrono::high_resolution_clock::now()}, stopped{false} {}
 
+  ~Timer() {
+    stop();
+    auto ns = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
+    summary.add({name, trials, ns});
+  }
+
+  Timer& operator=(const Timer&) = delete;
+
+  void set_trials(size_t trials) { this->trials = trials; }
+
+  void stop() {
+    if (stopped)
+      return;
+    stopped = true;
+    end = std::chrono::high_resolution_clock::now();
+  }
+
+private:
+  std::string name;
+  size_t trials;
+  std::chrono::high_resolution_clock::time_point start;
+  std::chrono::high_resolution_clock::time_point end;
+  bool stopped;
+
+  TimerSummary& summary;
 };
