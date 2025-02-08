@@ -312,7 +312,7 @@ Here's a step-by-step guide to implement this algorithm:
     >            | /* Some other steps */
     >            | std::ranges::to<std::string>();
     > ```
-    > You might be tempted to do something similar here with `std::ranges::to<std::set<Mispelling>>()`. This is a good idea! But the `std::ranges::to` method was only recently introduced in C++23. Depending on the version of compiler yolu are using, this code may compile or it may not! To be safe, and to make sure that your code compiles when we run it through the autograder on our end, please use the `std::set<Mispelling>` constructor with iterators. **In general, please only use C++ features up through C++20 for this assignment.**
+    > You might be tempted to do something similar here with `std::ranges::to<std::set<Mispelling>>()`. This is a good idea! But the `std::ranges::to` method was only recently introduced in C++23. Depending on the version of compiler you are using, this code may compile or it may not! To be safe, and to make sure that your code compiles when we run it through the autograder on our end, please use the `std::set<Mispelling>` constructor with iterators. **In general, please only use C++ features up through C++20 for this assignment.**
 
 If you have implemented everything correctly up to this point, you should have a fully functioning spellchecker now! To test it out, try re-compiling and running:
 
