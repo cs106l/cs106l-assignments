@@ -94,7 +94,7 @@ Here's a step-by-step guide you can follow to accomplish this:
 1. **Step One: Identify all iterators to space characters**  
     If we can get all iterators in the string pointing to whitespace characters, then we can more-or-less think of the tokens present in the string as the characters between any two whitespace characters. We almost want to call `find_if` multiple times to collect all of iterators to whitespace characters. Fortunately, we have provided you with a method to do just that, `find_all`.
 
-    > 📄 **`find_all`**
+    > 📄 [**`find_all`**](./utils.cpp)
     > ```cpp
     > template <typename Iterator, typename UnaryPred>
     > std::vector<Iterator> find_all(Iterator begin, Iterator end, UnaryPred pred);
@@ -102,24 +102,24 @@ Here's a step-by-step guide you can follow to accomplish this:
     >
     > Returns a vector of all the iterators between `begin` and `end` whose element matches the unary predicate `pred`. **This vector also includes the boundary iterators, `begin` and `end`**. In other words, if `it` is an iterator in the returned vector, then either `pred(*it)` or `it == begin` or `it == end`. The iterators in the vector are guaranteed to be in order.
 
-    We can get a vector of all the iterators to whitespace character by calling `find_all` on our `source` string and passing in a unary predicate that checks if a character is whitespace. We thankfully have such a function built-in to C++: it is called `isspace`.
+    We can get a vector of all the iterators to whitespace character by calling `find_all` on our `source` string and passing in a unary predicate that checks if a character is whitespace. Thankfully, such a function comes built-in with C++: it is called `isspace`.
 
-    > [📄 **`isspace`**](https://en.cppreference.com/w/c/string/byte)  
+    > 📄 [**`isspace`**](https://en.cppreference.com/w/c/string/byte)  
     > When passing `isspace` to `find_all`, we must pass it as `isspace` and not `std::isspace`. This is because there are actually multiple versions of the `isspace` method:
     >
     > ```cpp
     > int isspace(int ch);                          // Defined in header <cctype> and <ctype.h>
     >
-    > template< class CharT >
-    > bool isspace( CharT ch, const locale& loc );  // Defined in header <locale>
+    > template <class CharT>
+    > bool isspace(CharT ch, const locale& loc);    // Defined in header <locale>
     > ```
     >
     > Technically, the first version is defined both [as part of the `namespace std`](https://en.cppreference.com/w/cpp/header/cctype) and [as a free-floating function inherited from C](https://en.cppreference.com/w/c/string/byte) (and not in any particular namespace). The second version is part of `std` and defined in the `<locale>` header. Writing `isspace` by itself refers to the C version, whereas `std::isspace` refers to both of the above functions and so the compiler has a hard time inferring the `UnaryPred` type parameter.
     >
-    > Sometimes you will see people write `::isspace`: this just tells C++ to look in the *global namespace* (not inside `std`) for `isspace`, and accomplishes a similar thing.
+    > Sometimes you will see people write `::isspace`: this just tells C++ to look in the *global namespace* (not inside `std`) for `isspace`, and accomplishes the same thing.
 
 2. **Step Two: Generate tokens between consecutive space characters**  
-    Now that we have all of the iterators to space characters, we can consider a token as any range of characters between any two consecutive iterators. To see why, consider this diagram:
+    Now that we have all of the iterators to space characters, we can consider a token as any range of characters between two consecutive iterators to space characters. To see why, consider this diagram:
 
     ```
     "history will absolve me"
@@ -128,9 +128,9 @@ Here's a step-by-step guide you can follow to accomplish this:
      │  t1  │ t2 │   t3  │t4│
     ```
 
-    The arrows represent the return value of `find_all`, and as you can see, the tokens can be found between the arrows. Don't worry whether or not the iterator actually does point to whitespace or not—`Token` has a constructor that takes in a pair of iterators and automatically handles trimming whitespace around the edges.
+    The arrows represent the iterators returned by `find_all`, and as you can see, the tokens are the characters between any two arrows. Don't worry about whether or not the iterator actually does point to whitespace (you don't need to worry about "trimming" the tokens)—`Token` has a constructor that takes in a pair of iterators and automatically handles trimming whitespace around the edges.
 
-    > 📄 **`Token`**
+    > 📄 [**`Token`**](./spellcheck.cpp)
     > ```cpp
     > template <typename It>
     > Token(const std::string& source, It begin, It end);
@@ -140,18 +140,18 @@ Here's a step-by-step guide you can follow to accomplish this:
 
     We need to somehow call this constructor for each pair of consecutive iterators. To do this, we will use [overload (3) of `std::transform`](https://en.cppreference.com/w/cpp/algorithm/transform).
 
-    > [📄 **`std::transform`**](https://en.cppreference.com/w/cpp/algorithm/transform)
+    > 📄 [**`std::transform`**](https://en.cppreference.com/w/cpp/algorithm/transform)
     > ```cpp
     > template <class InputIt1, class InputIt2, class OutputIt, class BinaryOp>
     > OutputIt std::transform( InputIt1 first1, InputIt1 last1, InputIt2 first2,
     >               OutputIt d_first, BinaryOp binary_op );
     > ```
     > 
-    > Given two equally-sized ranges, one starting at `first1` and the other starting at `first2` (such that end iterator of the first range is `last1`), applies a binary function `binary_op` and stores the result to the output range (of the same size) starting at `d_first`. 
+    > Given two equally-sized ranges, one starting at `first1` and the other starting at `first2` (such that end iterator of the first range is `last1`), applies a binary function `binary_op` to each pair of iterators from the two ranges (e.g. `binary_op(first1, first2)`, `binary_op(first1 + 1, first2 + 1)`, etc.) and stores the result to the output range (of the same size) starting at `d_first`. 
     
-    For our `binary_op`, we can provide a lambda function that takes in two `std::string::iterator`s (you might choose to use `auto` parameters here, as discussed in lecture) `it1` and `it2`, and constructs the `Token` using `Token { source, it1, it2 }`. Note that we must pass `source` to this constructor, so you will need to capture it in the lambda function you create!
+    For our `binary_op`, we can provide a lambda function that takes in two `std::string::iterator`s (you might choose to use `auto` parameters for this lambda, as discussed in lecture) `it1` and `it2`, and constructs the `Token` using the aforementioned `Token { source, it1, it2 }` constructor. Note that we must pass `source` to this constructor, so you will need to capture it in the lambda function you create!
 
-    For the output range (`d_first`), we will first create a `std::set<Token>` to store the tokens that we find. Suppose we call that variables `tokens`. Then, we can create an [`std::inserter(tokens, tokens.end())`](https://en.cppreference.com/w/cpp/iterator/inserter) to store the resulting tokens to.
+    For the output range (`d_first`), we will first create a `std::set<Token>` to store the tokens that we find. Suppose we call that set `tokens`. Then, we can create an [`std::inserter(tokens, tokens.end())`](https://en.cppreference.com/w/cpp/iterator/inserter) to store the resulting tokens to.
 
     > [📄 **`std::inserter`**]((https://en.cppreference.com/w/cpp/iterator/inserter))
     > ```cpp
@@ -160,13 +160,15 @@ Here's a step-by-step guide you can follow to accomplish this:
     > ```
     >
     > An output iterator that inserts any value written to it into the container `c` at position `i` (where `i` is of the container's iterator type). The return value is an [`std::insert_iterator<Container>`](https://en.cppreference.com/w/cpp/iterator/insert_iterator) which can be passed as the output range to other STL algorithms (for example, `std::transform`).
+    >
+    > Note that `std::inserter` returns an iterator that is a bit different than other iterator types we have seen, but it is still an output iterator! Other algorithms can dereference it and write to it, and internally it inserts elements into the underlying container.
 
-    For the input ranges (`first1`, `last1`, and `first2`), we will need to be a bit clever in our choice of iterators. We must choose iterators such that the `binary_op(first1, first2)` constructs the first token in the container, `binary_op(first1 + 1, first2 + 1)` constructs the second token in the container, etc. How can we manipulate the iterators to allow this behaviour? Remember, `tokens.begin()` is the first iterator of the container, `tokens.begin() + 1` is the second iterator, etc. Also note: there is nothing preventing the range given by `first1` from overlapping with the range given by `first2`!
+    For the input ranges (`first1`, `last1`, and `first2`), we will need to be a bit clever in our choice of iterators. We must choose iterators such that the `binary_op(first1, first2)` constructs the first token in the container, `binary_op(first1 + 1, first2 + 1)` constructs the second token in the container, etc. How can we manipulate these parameters such that we apply `binary_op` to consecutive pairs of whitespace iterators? Remember, `tokens.begin()` is the first iterator of the container, `tokens.begin() + 1` is the second iterator, etc. **Hint: there is nothing preventing the range given by `first1` from overlapping with the range given by `first2`!**
 
 3. **Step Three: Get rid of empty tokens**  
-    Some of the tokens we've produced so far will only consist of whitespace (for example, what if there were multiple consecutive whitespace characters in our string). We will need to remove these characters. Luckily, there is a [`std::erase_if` function](https://en.cppreference.com/w/cpp/container/set/erase_if) that can remove elements from an `std::set` which match some condition.
+    Some of the tokens we've produced so far will only consist of whitespace (for example, what if there were multiple consecutive whitespace characters in our string). We will need to remove these characters. Luckily, there is a [`std::erase_if` function](https://en.cppreference.com/w/cpp/container/set/erase_if) that can remove elements from a `std::set` which match some condition.
 
-    > [📄 **`std::erase_if`**](https://en.cppreference.com/w/cpp/container/set/erase_if)
+    > 📄 [**`std::erase_if`**](https://en.cppreference.com/w/cpp/container/set/erase_if)
     > ```cpp
     > template <class Key, class Compare, class Alloc, class Pred>
     > std::set<Key, Compare, Alloc>::size_type erase_if (std::set<Key, Compare, Alloc>& c, Pred pred);
@@ -174,7 +176,7 @@ Here's a step-by-step guide you can follow to accomplish this:
 
     For `pred`, we can pass a lambda function which checks if a token is empty. For example, if `token` is a `Token`, we could check `token.content.empty()`.
 
-    Finally, you can return `tokens`!
+    Finally, you can return `tokens`, which contains all the tokens in the input string.
 
 Once you've finished this step, your spellcheck should start reporting token counts. If you compile your code, you can run:
 
@@ -182,7 +184,7 @@ Once you've finished this step, your spellcheck should start reporting token cou
 ./main "hello wrld"
 ```
 
-to spellcheck the string `"hello wrld"`. Notice that it now reports:
+to spellcheck the string `"hello wrld"`. It should report:
 
 ```
 Loading dictionary... loaded 464811 words.
@@ -201,7 +203,10 @@ std::set<Mispelling> spellcheck(const Corpus& source, const Dictionary& dictiona
 
 The `spellcheck` method takes in a tokenized `Corpus` (this is the output of your `tokenize` method) and a `Dictionary` (which is just an `std::unordered_set<std::string>` represent all the valid English words), and returns a set of `Mispelling` structs. Each `Mispelling` struct identifies a mispelled `token` and a set of suggested words that `token` could be replaced with to spell the word properly.
 
-To identify mispellings, we will run the following algorithm. This time, we get some practice using the new ranges/views library methods in the `std::ranges::views` namespace:
+> [!NOTE]
+> **Addendum:** After releasing this assignment, we realized that the name `Mispelling` is itself actually misspelled. Ah... the irony.
+
+To identify mispellings, we will run the following algorithm. This time, we get some practice using the new ranges/views library in the `std::ranges::views` namespace:
 
 1. Skip words that are already correctly spelled.
 2. Otherwise, find one-edit-away words in the dictionary using Damerau-Levenshtein.
@@ -210,9 +215,9 @@ To identify mispellings, we will run the following algorithm. This time, we get 
 Here's a step-by-step guide to implement this algorithm:
 
 1. **Step One: Skip words that are already correctly spelled.**  
-    We'll know that a word is spelled correctly if it appears in `dictionary`: for example `dictionary.contains("world")` would return `true` whereas `dictionary.contains("wrld")` would be `false`. Our first step is to skip over words in `source` that have already been correctly spelled. To do this, we can use the `std::ranges::views::filter` view.
+    We'll know that a word is spelled correctly if it appears in `dictionary`: for example `dictionary.contains("world")` would return `true` whereas `dictionary.contains("wrld")` would return `false`. Our first step is to skip over words in `source` that have already been correctly spelled. To do this, we can use the `std::ranges::views::filter` view.
 
-    > [📄 **`std::ranges::views::filter`**](https://en.cppreference.com/w/cpp/ranges/filter_view)  
+    > 📄 [**`std::ranges::views::filter`**](https://en.cppreference.com/w/cpp/ranges/filter_view)  
     > ```cpp
     > template <ranges::viewable_range R, class Pred>
     > constexpr ranges::view auto filter(R&& r, Pred&& pred);
@@ -221,7 +226,7 @@ Here's a step-by-step guide to implement this algorithm:
     > constexpr /* range adaptor closure */ filter(Pred&& pred);
     > ```
     >
-    > `filter(r, pred)` yields a view that adapts an underlying range `r` such that, when iterating over the resulting view, only elements which satisfy `pred` are included. `filter(pred)` creates a *range adaptor* which can be applied to a range by chaining it with `operator|`.
+    > `filter(r, pred)` yields a view that adapts an underlying range `r` such that, when iterating over the resulting view, only elements which satisfy `pred` are included. `filter(pred)` creates a *range adaptor* which can be applied to a range by chaining it with `operator|`, as shown below.
 
     When setting up an `std::ranges::views` pipeline, we chain together ranges in a series of steps. Each step *adapts* the previous step, lazily applying an operation (such as filtering out or transforming elements) via a lambda function. If you look at the above definition of `std::ranges::views::filter`, you'll see that there are two ways of doing this:
 
@@ -233,7 +238,7 @@ Here's a step-by-step guide to implement this algorithm:
     auto view = source | std::ranges::views::filter(/* A lambda function predicate */);
     ```
 
-    The second version is an arguably cleaner syntax, because it allows us to chain more than one step together in the pipeline using `operator|` without creating separate variables. Notice that `std::ranges::views::filter` is a bit tedious to spell out, so people will often shorten this by creating a *namespace alias* like so:
+    The second version is an arguably cleaner syntax, because it allows us to chain more than one step together in the pipeline using `operator|` without creating separate variables for each step. Notice that `std::ranges::views::filter` is a bit tedious to spell out, so people will often shorten this by creating a *namespace alias* like so:
 
     ```cpp
     namespace rv = std::ranges::views;
@@ -242,12 +247,12 @@ Here's a step-by-step guide to implement this algorithm:
 
     The autograder will accept either version, using `rv::filter` with a namespace alias or `std::ranges::views::filter`.
 
-    Your job in this step is to replace `/* A lambda function predicate */` with a lambda function that takes in a `Token` and returns `true` if that token's content is spelled **incorrectly**. To do this, you will need to make reference to `dictionary` inside of the lambda function, and so you will have to capture it. Should you capture it by reference or value?
+    Your job in this step is to replace `/* A lambda function predicate */` with a lambda function that takes in a `Token` and returns `true` if that token's content is spelled **incorrectly** (we are only interested in misspelled words). To do this, you will need to make reference to `dictionary` inside of the lambda function, and so you will have to capture it. Should you capture it by reference or value?
 
 2. **Step Two: Find one-edit-away words in the dictionary using Damerau-Levenshtein**  
-    At this point, `view` represents a view over all the tokens in `source` that are *incorrectly spelled*. Now, we will transform each of these tokens into a corresponding `Mispelling` object (and generate suggestions in the process) using the `std::ranges::views::transform` view. 
+    At this point, `view` represents a view over all the tokens in `source` that are *incorrectly spelled*. Now, we will transform each of these misspelled tokens into a corresponding `Mispelling` object (and generate suggestions in the process) using the `std::ranges::views::transform` view. 
 
-    >  [📄 **`std::ranges::views::transform`**](https://en.cppreference.com/w/cpp/ranges/transform_view)  
+    >  📄 [**`std::ranges::views::transform`**](https://en.cppreference.com/w/cpp/ranges/transform_view)  
     > ```cpp
     > template <ranges::viewable_range R, class F>
     > constexpr ranges::view auto transform (R&& r, F&& func);
@@ -270,16 +275,16 @@ Here's a step-by-step guide to implement this algorithm:
     
     What should we put for `/* A lambda function taking a Token -> Mispelling */`? We should replace it with a lambda function that takes in a `Token` object and produces a `Mispelling` object that contains all of the suggested alternate spellings for `token`. To identify suggestions, we will search through `dictionary` for all the words whose Damerau-Levenshtein distance to `token.content` is exactly `1`. To find the Damerau-Levenshtein distance, you can use the provided `levenshtein` function.
 
-    > 📄 **`levenshtein`**  
+    > 📄 [**`levenshtein`**](./spellcheck.h)  
     > ```cpp
     > size_t levenshtein(const std::string& a, const std::string& b);
     > ```
     >
-    > Returns the Damerau-Levenshtein distance between `a` and `b`. Roughly speaking, this represents the number of modifications that must be performed to `a` in order to arrive at `b`. In reality, this function implements a version of the Damerau-Levenshtein distance optimized for our purposes which will early exit if at any point the computed distance would be greater than `1`. 
+    > Returns the Damerau-Levenshtein distance between `a` and `b`. Roughly speaking, this represents the number of modifications that must be performed to `a` in order to arrive at `b`. In reality, this function implements a highly optimized version of the Damerau-Levenshtein distance that will early exit if at any point the computed distance would be greater than `1`. 
 
     Note that going through `dictionary` and finding suggestions should happen for *each* mispelled word. **That means that you will need to nest another `std::ranges::views::filter` call inside the `/* A lambda function taking a Token -> Mispelling */`.** To construct the `std::set` of suggestions, you will need to materialize the nested view of suggested words into a set, triggering the lazy evaluation, using [overload (4) of the `std::set` constructor](https://en.cppreference.com/w/cpp/container/set/set).
 
-    > [📄 **`std::set`**](https://en.cppreference.com/w/cpp/ranges/transform_view)  
+    > 📄 [**`std::set`**](https://en.cppreference.com/w/cpp/ranges/transform_view)  
     > ```cpp
     > template <class InputIt>
     > set(InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator());
@@ -291,7 +296,7 @@ Here's a step-by-step guide to implement this algorithm:
 
     ```cpp
     auto view = dictionary | rv::filter(/* A lambda function predicate */);
-    auto suggestions = std::set<std::string>(view.begin(), view.end());
+    std::set<std::string> suggestions(view.begin(), view.end());
     ```
 
     Lastly, to create a `Mispelling` object from a `token` and a set of `suggestions`, we can use uniform initialization:
@@ -300,8 +305,10 @@ Here's a step-by-step guide to implement this algorithm:
     Mispelling { token, suggestions }
     ```
 
+    This should be the return value of the `/* A lambda function taking a Token -> Mispelling */` lambda function in the code above.
+
 3. **Step Three: Drop misspellings with no suggestions.**  
-    At this point, `view` contains all of our mispelled words with their suggestions: it is a view over a collection of `Mispelling` objects. However, some of these `Mispelling` objects won't have any suggestions. For example, the gibberish word `"adskadnfknfs"` is definitely mispelled, but there's no word in the dictionary that is one away from it. We would like to remove these empty mispellings from our view before returning them.
+    At this point, `view` contains all of our misspelled words with their suggestions: it is a view over a collection of `Mispelling` objects. However, some of these `Mispelling` objects won't have any suggestions. For example, the gibberish word `"adskadnfknfs"` is definitely misspelled, but there's no word in the English dictionary that is one edit away from it. We would like to remove these suggestion-less mispellings from our view before returning them.
 
     Once again, we can apply `std::ranges::views::filter` to `view`. You should have all the information you need to do this! After you filter the empty mispellings, you'll want to materialize `view` into an `std::set<Mispelling>` and return it, which you can do through similar process described for `suggestions` in Part Two above!
 
@@ -347,7 +354,7 @@ You can also spellcheck one of the given examples:
 > 
 > If you are looking for an added challenge, try running your code with the `--profile` option. Our spellchecking algorithm, despite using a simple brute
 > force approach that searches through the entire dictionary of about half a million words, still runs quite quickly! Feel free to look into ways you can
-> improve the performance of this algorithm (while still having correct output)! 
+> improve the performance of this algorithm (while still having correct output)! This is completely optional, but we would love to see what you come up with.
 
 
 ## 🚀 Submission Instructions
