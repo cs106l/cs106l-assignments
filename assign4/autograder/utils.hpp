@@ -116,7 +116,7 @@ public:
         format_time(ns / trials);
         std::cout << " per " << trial_noun;
       }
-      std::cout << " (" << trials << " token";
+      std::cout << " (" << trials << " " << trial_noun;
       if (trials != 1) std::cout << "s";
       std::cout << ")\n";
     }
