@@ -362,7 +362,7 @@ If you pass all tests, you are ready to submit! Before you submit the assignment
 
 Your deliverable should be:
 
-* `spellcheck.h`
+* `spellcheck.cpp`
 
 You may resubmit as many times as you'd like before the deadline.
 
