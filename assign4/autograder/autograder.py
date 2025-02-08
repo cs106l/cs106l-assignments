@@ -32,6 +32,8 @@ FUNCTION_MATCHERS: Dict[str, Iterable[Union[str, Iterable[str]]]] = {
     "spellcheck": [
         ["std::ranges::views::filter", "rv::filter"],
         ["std::ranges::views::transform", "rv::transform"],
+        "!std::copy_if",
+        "!std::transform",
         "levenshtein",
         "#noloops",
     ],
@@ -144,7 +146,11 @@ def add_matcher_tests(grader: Autograder, file: str):
                         matcher = [matcher]
 
                     for m in matcher:
-                        if m in method_body:
+                        if m.startswith("!"):
+                            m = m[1:]
+                            if m in method_body:
+                                raise RuntimeError(f"Method '{method_copy}' is not allowed to call method: {m}")
+                        elif m in method_body:
                             print(f"🔎 {method_copy} called method {m}")
                             break
                     else:
