@@ -60,9 +60,9 @@ As you are following the instructions below, we recommend intermittently compili
 
 ## Building Ispell
 
-The classic Unix program Ispell works as follows. First, a dictionary is loaded into memory containing all of the common English words. A word is mispelled if it can't be found in the dictionary. Suggestions for each mispelled word are found using the [Damerau-Levenshtein distance](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) algorithm, which tells you approximately how many edits (additions, deletions or replacements of a single letter, or swapping two adjacent letters) must be done to change one word into the other. If the Damerau-Levenshtein distance is exactly one between the mispelled word and one of the dictionary words, then it is added to the list of suggestions. The idea here is that when one mispells a word, usually they are only off by one small change (for example, consider "mispelled" vs. "misspelled").
+The classic Unix program Ispell works as follows. First, a dictionary is loaded into memory containing all of the common English words. A word is misspelled if it can't be found in the dictionary. Suggestions for each misspelled word are found using the [Damerau-Levenshtein distance](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) algorithm, which tells you approximately how many edits (additions, deletions or replacements of a single letter, or swapping two adjacent letters) must be done to change one word into the other. If the Damerau-Levenshtein distance is exactly one between the misspelled word and one of the dictionary words, then it is added to the list of suggestions. The idea here is that when one misspells a word, usually they are only off by one small change (for example, consider "mispelled" vs. "misspelled").
 
-In this assignment, we have given you all the infrastructure to build this spellchecker, including implementations of the Damerau-Levenshtein function. Your job will be to implement the core of the algorithm that spellchecks words. Specifically, you will write an algorithm that splits an input string into a set of tokens (`tokenize`), and another algorithm that actually identifies mispelled words given a (tokenized) input string and a dictionary (`spellcheck`). To add a bit of an extra challenge (and to make this relevant to the last week's lectures), there's a catch: you can't use any for/while loops in your code. You must implement these tasks entirely using the STL: `tokenize` using the traditional STL algorithms, and `spellcheck` using the brand new ranges library. In the process, you will get exposure to how we can manipulate modern data structures in C++ using algorithms and lambda functions.
+In this assignment, we have given you all the infrastructure to build this spellchecker, including implementations of the Damerau-Levenshtein function. Your job will be to implement the core of the algorithm that spellchecks words. Specifically, you will write an algorithm that splits an input string into a set of tokens (`tokenize`), and another algorithm that actually identifies misspelled words given a (tokenized) input string and a dictionary (`spellcheck`). To add a bit of an extra challenge (and to make this relevant to the last week's lectures), there's a catch: you can't use any for/while loops in your code. You must implement these tasks entirely using the STL: `tokenize` using the traditional STL algorithms, and `spellcheck` using the brand new ranges library. In the process, you will get exposure to how we can manipulate modern data structures in C++ using algorithms and lambda functions.
 
 This may sound like a lot, but don't worry! This handout will walk you through each of the algorithms in detail.
 
@@ -143,8 +143,8 @@ Here's a step-by-step guide you can follow to accomplish this:
     > 📄 [**`std::transform`**](https://en.cppreference.com/w/cpp/algorithm/transform)
     > ```cpp
     > template <class InputIt1, class InputIt2, class OutputIt, class BinaryOp>
-    > OutputIt std::transform( InputIt1 first1, InputIt1 last1, InputIt2 first2,
-    >               OutputIt d_first, BinaryOp binary_op );
+    > OutputIt std::transform(InputIt1 first1, InputIt1 last1, InputIt2 first2,
+    >                         OutputIt d_first, BinaryOp binary_op);
     > ```
     > 
     > Given two equally-sized ranges, one starting at `first1` and the other starting at `first2` (such that end iterator of the first range is `last1`), applies a binary function `binary_op` to each pair of iterators from the two ranges (e.g. `binary_op(first1, first2)`, `binary_op(first1 + 1, first2 + 1)`, etc.) and stores the result to the output range (of the same size) starting at `d_first`. 
@@ -201,7 +201,7 @@ using Dictionary = std::unordered_set<std::string>;
 std::set<Mispelling> spellcheck(const Corpus& source, const Dictionary& dictionary);
 ```
 
-The `spellcheck` method takes in a tokenized `Corpus` (this is the output of your `tokenize` method) and a `Dictionary` (which is just an `std::unordered_set<std::string>` represent all the valid English words), and returns a set of `Mispelling` structs. Each `Mispelling` struct identifies a mispelled `token` and a set of suggested words that `token` could be replaced with to spell the word properly.
+The `spellcheck` method takes in a tokenized `Corpus` (this is the output of your `tokenize` method) and a `Dictionary` (which is just an `std::unordered_set<std::string>` represent all the valid English words), and returns a set of `Mispelling` structs. Each `Mispelling` struct identifies a misspelled `token` and a set of suggested words that `token` could be replaced with to spell the word properly.
 
 > [!NOTE]
 > **Addendum:** After releasing this assignment, we realized that the name `Mispelling` is itself actually misspelled. Ah... the irony.
@@ -255,7 +255,7 @@ Here's a step-by-step guide to implement this algorithm:
     >  📄 [**`std::ranges::views::transform`**](https://en.cppreference.com/w/cpp/ranges/transform_view)  
     > ```cpp
     > template <ranges::viewable_range R, class F>
-    > constexpr ranges::view auto transform (R&& r, F&& func);
+    > constexpr ranges::view auto transform(R&& r, F&& func);
     > 
     > template <class F>
     > constexpr /*range adaptor closure*/ transform(F&& func); 
@@ -282,7 +282,7 @@ Here's a step-by-step guide to implement this algorithm:
     >
     > Returns the Damerau-Levenshtein distance between `a` and `b`. Roughly speaking, this represents the number of modifications that must be performed to `a` in order to arrive at `b`. In reality, this function implements a highly optimized version of the Damerau-Levenshtein distance that will early exit if at any point the computed distance would be greater than `1`. 
 
-    Note that going through `dictionary` and finding suggestions should happen for *each* mispelled word. **That means that you will need to nest another `std::ranges::views::filter` call inside the `/* A lambda function taking a Token -> Mispelling */`.** To construct the `std::set` of suggestions, you will need to materialize the nested view of suggested words into a set, triggering the lazy evaluation, using [overload (4) of the `std::set` constructor](https://en.cppreference.com/w/cpp/container/set/set).
+    Note that going through `dictionary` and finding suggestions should happen for *each* misspelled word. **That means that you will need to nest another `std::ranges::views::filter` call inside the `/* A lambda function taking a Token -> Mispelling */`.** To construct the `std::set` of suggestions, you will need to materialize the nested view of suggested words into a set, triggering the lazy evaluation, using [overload (4) of the `std::set` constructor](https://en.cppreference.com/w/cpp/container/set/set).
 
     > 📄 [**`std::set`**](https://en.cppreference.com/w/cpp/ranges/transform_view)  
     > ```cpp
@@ -355,7 +355,7 @@ You can also spellcheck one of the given examples:
 > --dict dict_path  Sets the location of the dictionary. Defaults to words.txt
 > --stdin           Read from stdin. You can use this to pipe input from a file
 > --unstyled        Don't add any color to the output!
-> --profile          Profile the code, printing out how long tokenizing/spellcheck took
+> --profile         Profile the code, printing out how long tokenizing/spellcheck took
 > text              The text you want to spellcheck, if not using stdin
 > ```
 > 
