@@ -340,6 +340,13 @@ You can also spellcheck one of the given examples:
 ```
 
 > [!NOTE]  
+> **PowerShell Users:**  
+> If you are using Microsoft PowerShell (Windows), the syntax to spellcheck an example will look a little bit different:
+> ```sh
+> Get-Content "examples/(marquez).txt" | ./main --stdin
+> ```
+
+> [!NOTE]  
 > We encourage you to play around with the spellcheck program and see what interesting behaviours you find. Here is the full list of options you can try:
 > 
 > ```

@@ -1,10 +1,9 @@
 from utils import Autograder
 
+from typing import Dict, Iterable, Union
+
+from colorama import Fore, Style
 import difflib
-from colorama import Back, Fore, Style
-
-from typing import Dict, Iterable, List, Tuple, Union
-
 import os
 import re
 import subprocess
@@ -215,13 +214,14 @@ def spellcheck(file_path):
     exe_path = find_executable(PATH)
     command = [exe_path, "--stdin", "--unstyled"]
 
-    with open(file_path, "r") as file:
+    with open(file_path, "r", encoding="utf-8") as file:
         result = subprocess.run(
             command,
             stdin=file,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
+            encoding="utf-8"
         )
 
     return result.stdout
@@ -239,7 +239,7 @@ def generate_gold_dir():
         try:
             output = spellcheck(example_file_path)
             gold_file_path = os.path.join(EXAMPLES_GOLD_PATH, example_file)
-            with open(gold_file_path, "w") as gold_file:
+            with open(gold_file_path, "w", encoding="utf-8") as gold_file:
                 gold_file.write(output)
 
             print(f"Processed {example_file} -> {gold_file_path}")
