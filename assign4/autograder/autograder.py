@@ -1,6 +1,7 @@
+from utils import Autograder
+
 import difflib
 from colorama import Back, Fore, Style
-from utils import Autograder
 
 from typing import Dict, Iterable, List, Tuple, Union
 
