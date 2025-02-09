@@ -155,9 +155,10 @@ def add_matcher_tests(grader: Autograder, file: str):
                             print(f"🔎 {method_copy} called method {m}")
                             break
                     else:
-                        raise RuntimeError(
-                            f"Method '{method_copy}' must call one of the following methods: {matcher}."
-                        )
+                        if not any(m.startswith("!") for m in matcher):
+                            raise RuntimeError(
+                                f"Method '{method_copy}' must call one of the following methods: {matcher}."
+                            )
 
             return test
 
