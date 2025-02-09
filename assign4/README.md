@@ -153,7 +153,7 @@ Here's a step-by-step guide you can follow to accomplish this:
 
     For the output range (`d_first`), we will first create a `std::set<Token>` to store the tokens that we find. Suppose we call that set `tokens`. Then, we can create an [`std::inserter(tokens, tokens.end())`](https://en.cppreference.com/w/cpp/iterator/inserter) to store the resulting tokens to.
 
-    > [📄 **`std::inserter`**]((https://en.cppreference.com/w/cpp/iterator/inserter))
+    > 📄 [**`std::inserter`**](https://en.cppreference.com/w/cpp/iterator/inserter)
     > ```cpp
     > template <class Container>
     > std::insert_iterator<Container> inserter(Container& c, typename Container::iterator i);
