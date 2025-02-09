@@ -166,7 +166,7 @@ Here's a step-by-step guide you can follow to accomplish this:
     For the input ranges (`first1`, `last1`, and `first2`), we will need to be a bit clever in our choice of iterators. We must choose iterators such that the `binary_op(first1, first2)` constructs the first token in the container, `binary_op(first1 + 1, first2 + 1)` constructs the second token in the container, etc. How can we manipulate these parameters such that we apply `binary_op` to consecutive pairs of whitespace iterators? Remember, `tokens.begin()` is the first iterator of the container, `tokens.begin() + 1` is the second iterator, etc. **Hint: there is nothing preventing the range given by `first1` from overlapping with the range given by `first2`!**
 
 3. **Step Three: Get rid of empty tokens**  
-    Some of the tokens we've produced so far will only consist of whitespace (for example, what if there were multiple consecutive whitespace characters in our string). We will need to remove these characters. Luckily, there is a [`std::erase_if` function](https://en.cppreference.com/w/cpp/container/set/erase_if) that can remove elements from a `std::set` which match some condition.
+    Some of the tokens we've produced so far will be empty (for example, what if there were multiple consecutive whitespace characters in our string). We will need to remove these tokens. Luckily, there is a [`std::erase_if` function](https://en.cppreference.com/w/cpp/container/set/erase_if) that can remove elements from a `std::set` which match some condition.
 
     > 📄 [**`std::erase_if`**](https://en.cppreference.com/w/cpp/container/set/erase_if)
     > ```cpp
@@ -176,7 +176,7 @@ Here's a step-by-step guide you can follow to accomplish this:
 
     For `pred`, we can pass a lambda function which checks if a token is empty. For example, if `token` is a `Token`, we could check `token.content.empty()`.
 
-    Finally, you can return `tokens`, which contains all the tokens in the input string.
+    Finally, you can return `tokens`, which contains all of the valid tokens in the input string.
 
 Once you've finished this step, your spellcheck should start reporting token counts. If you compile your code, you can run:
 
