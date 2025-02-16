@@ -149,7 +149,7 @@ Here's a step-by-step guide you can follow to accomplish this:
     > 
     > Given two equally-sized ranges, one starting at `first1` and the other starting at `first2` (such that end iterator of the first range is `last1`), applies a binary function `binary_op` to each pair of iterators from the two ranges (e.g. `binary_op(first1, first2)`, `binary_op(first1 + 1, first2 + 1)`, etc.) and stores the result to the output range (of the same size) starting at `d_first`. 
     
-    For our `binary_op`, we can provide a lambda function that takes in two `std::string::iterator`s (you might choose to use `auto` parameters for this lambda, as discussed in lecture) `it1` and `it2`, and constructs the `Token` using the aforementioned `Token { source, it1, it2 }` constructor. Note that we must pass `source` to this constructor, so you will need to capture it in the lambda function you create!
+    For our `binary_op`, we can provide a lambda function that takes in two `std::string::const_iterator`s (you might choose to use `auto` parameters for this lambda, as discussed in lecture) `it1` and `it2`, and constructs the `Token` using the aforementioned `Token { source, it1, it2 }` constructor. Note that we must pass `source` to this constructor, so you will need to capture it in the lambda function you create!
 
     For the output range (`d_first`), we will first create a `std::set<Token>` to store the tokens that we find. Suppose we call that set `tokens`. Then, we can create an [`std::inserter(tokens, tokens.end())`](https://en.cppreference.com/w/cpp/iterator/inserter) to store the resulting tokens to.
 
