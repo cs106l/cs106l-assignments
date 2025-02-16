@@ -5,7 +5,7 @@
 
 # Assignment 4: Ispell
 
-Due Friday, February 14th at 11:59PM
+Due Tuesday, February 18th at 11:59PM
 
 ## Overview
 
