@@ -1,6 +1,6 @@
 # Assignment 6: Explore Courses
 
-Due Sunday, February 23rd at 11:59PM
+Due Sunday, March 3rd at 11:59PM
 
 ## Overview
 
