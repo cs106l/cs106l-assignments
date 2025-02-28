@@ -74,11 +74,11 @@ With the help of your `operator<<`, your coworkers have been able to make good p
 
 To be specific, you will need to:
 
-1. Implement a destructor for the `User` class. To do so, implement the `User::~User()` SMF.
-2. Make the `User` class copy constructible. To do so, implement the `User::User(const User& user)` SMF.
-3. Make the `User` class copy assignable. To do so, implement the `User& User::operator=(const User& user)` SMF.
-4. Prevent the `User` class from being move constructed. To do so, delete the `User::User(User&& user)` SMF. 
-5. Prevent the `User` class from being move assigned. To do so, delete the `User& User::operator=(User&& user)` SMF.
+1. Implement a destructor for the `User` class. To do so, implement the `~User()` SMF.
+2. Make the `User` class copy constructible. To do so, implement the `User(const User& user)` SMF.
+3. Make the `User` class copy assignable. To do so, implement the `User& operator=(const User& user)` SMF.
+4. Prevent the `User` class from being move constructed. To do so, delete the `User(User&& user)` SMF. 
+5. Prevent the `User` class from being move assigned. To do so, delete the `User& operator=(User&& user)` SMF.
 
 In performing these tasks, you are expected to make changes to **both** the `user.h` and `user.cpp` files.
 
@@ -109,6 +109,8 @@ std::cout << charlie << std::endl;
 // User(name=Charlie, friends=[Alice])
 ```
 
+The function signature for this operator should be `User& operator+=(const User& rhs)`. Note that like the copy-assignment operator, it returns a reference to itself.
+
 ### `operator<`
 
 Recall that the `<` operator is required to store users in a `std::set`, as `std::set` is implemented in terms of the comparison operator. Implement `operator<` to compare users alphabetically by name. For example:
@@ -126,6 +128,7 @@ else
 // Alice is less than Charlie
 ```
 
+The function signature for this operator should be `bool operator<(const User& rhs)`.
 
 ## 🚀 Submission Instructions
 
