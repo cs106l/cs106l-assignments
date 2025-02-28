@@ -128,7 +128,7 @@ else
 // Alice is less than Charlie
 ```
 
-The function signature for this operator should be `bool operator<(const User& rhs)`.
+The function signature for this operator should be `bool operator<(const User& rhs) const`.
 
 ## 🚀 Submission Instructions
 
