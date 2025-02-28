@@ -3,6 +3,8 @@
 #include <cstddef>
 #include <utility>
 
+namespace cs106l {
+
 /**
  * @brief A smart pointer that owns an object and deletes it when it goes out of scope.
  * @tparam T The type of the object to manage.
@@ -101,6 +103,9 @@ public:
  * @tparam Args The types of the arguments to pass to the constructor of T.
  * @param args The arguments to pass to the constructor of T.
  */
-template <typename T, typename... Args> unique_ptr<T> make_unique(Args&&... args) {
+template <typename T, typename... Args> 
+unique_ptr<T> make_unique(Args&&... args) {
   return unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+
 }

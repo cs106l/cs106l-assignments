@@ -24,7 +24,7 @@ template <typename T> struct ListNode {
   T value;
 
   /** @brief The smart pointer to the next node. May be null. */
-  unique_ptr<ListNode<T>> next;
+  cs106l::unique_ptr<ListNode<T>> next;
 
   /**
    * @brief Constructs a single element linked list, setting `next` to `nullptr`.
@@ -50,7 +50,7 @@ template <typename T> struct ListNode {
  * @param values The values to store in the list.
  * @return A `unique_ptr` to the head of the list.
  */
-template <typename T> unique_ptr<ListNode<T>> create_list(const std::vector<T>& values) {
+template <typename T> cs106l::unique_ptr<ListNode<T>> create_list(const std::vector<T>& values) {
   /* STUDENT TODO: Implement this method */
   throw std::runtime_error("Not implemented: createList");
 }
@@ -63,7 +63,7 @@ template <typename T> unique_ptr<ListNode<T>> create_list(const std::vector<T>& 
  * @paragraph func The function to apply to each element.
  */
 template <typename T, typename Func>
-void map_list(const unique_ptr<ListNode<T>>& head, const Func& func) {
+void map_list(const cs106l::unique_ptr<ListNode<T>>& head, const Func& func) {
   if (!head)
     return;
   func(head->value);

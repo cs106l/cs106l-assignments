@@ -131,9 +131,9 @@ Now that we have a `unique_ptr` implementation, let's use it! Take a look at `ma
 int main()
 {
 
-  auto head = make_unique<ListNode<int>>(1);
-  head->next = make_unique<ListNode<int>>(2);
-  head->next->next = make_unique<ListNode<int>>(3);
+  auto head = cs106l::make_unique<ListNode<int>>(1);
+  head->next = cs106l::make_unique<ListNode<int>>(2);
+  head->next->next = cs106l::make_unique<ListNode<int>>(3);
 
   // memory of head:
   //
@@ -158,11 +158,11 @@ Notice that we didn't have to make any calls to `delete`! The RAII behaviour of 
 > ##### `short_answer.txt`  
 > **Q3:** This method of recursive deallocation through RAII works great for small lists, but may pose a problem for longer lists. Why? Hint: what is the limit for how "deep" a recursive function's call stack can grow?
 
-**Your task is to implement the function `create_list` which converts a `std::vector<T>` into a `unique_ptr<ListNode<T>>`.** The order of elements in the vector should be preserved in the list, and `nullptr` should be returned for an empty vector. There are many ways you could go about this; one is to construct the list in reverse (starting at the tail and working towards the head). Here is an algorithm you should follow in your implementation:
+**Your task is to implement the function `create_list` which converts a `std::vector<T>` into a `unique_ptr<ListNode<T>>`.** The order of elements in the vector should be preserved in the list, and `nullptr` should be returned for an empty vector. There are many ways you could go about this; one is to construct the list in reverse (starting at the tail and working towards the head). **Note that you must use the `cs106l::unique_ptr` under the `cs106l` namespace, and not the `std::unique_ptr`!** Here is an algorithm you should follow in your implementation:
 
-1. Initialize a `unique_ptr<ListNode<T>> head = nullptr`.
+1. Initialize a `cs106l::unique_ptr<ListNode<T>> head = nullptr`.
 2. Iterate through the `std::vector` **backwards.** For each element in the vector:
-    - 2a. Create a new `unique_ptr<ListNode<T>> node` whose value is the element in the vector.
+    - 2a. Create a new `cs106l::unique_ptr<ListNode<T>> node` whose value is the element in the vector.
     - 2b. Set `node->next` to `head`.
     - 2c. Set `head` to `node`
 3. Finally, return `head`

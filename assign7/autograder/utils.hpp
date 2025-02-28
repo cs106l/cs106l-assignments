@@ -70,12 +70,12 @@ void test_linked_list_example() {
 void test_destructor() {
   MemoryDiagnostics::MemoryGuard guard("Failed to deallocate memory in unique_ptr destructor!");
   for (size_t i = 0; i < 1000; ++i) {
-    auto ptr = ::make_unique<std::string>("hello");
+    auto ptr = cs106l::make_unique<std::string>("hello");
   }
 
   // Ensure that deallocation of empty unique_ptr is successful
   for (size_t i = 0; i < 1000; ++i) {
-    unique_ptr<std::string> ptr;
+    cs106l::unique_ptr<std::string> ptr;
   }
 }
 
@@ -85,7 +85,7 @@ void test_move_constructor() {
       "lecture on move semantics!");
   size_t sum = 0;
   for (size_t i = 0; i < 1000; ++i) {
-    auto ptr = ::make_unique<std::string>(kReallyLongString);
+    auto ptr = cs106l::make_unique<std::string>(kReallyLongString);
     auto size = ptr->size();
     auto other = std::move(ptr);
     ptr.~unique_ptr(); // Forcibly destroy old pointer
@@ -107,8 +107,8 @@ void test_move_assignment() {
       "the existing data before assigning the private fields? It may help to review the lecture on "
       "move semantics!");
   for (size_t i = 0; i < 1000; ++i) {
-    auto ptr1 = ::make_unique<std::string>("hello");
-    auto ptr2 = ::make_unique<std::string>("world");
+    auto ptr1 = cs106l::make_unique<std::string>("hello");
+    auto ptr2 = cs106l::make_unique<std::string>("world");
     ptr1 = std::move(ptr2);
     if (ptr2) {
       std::cerr << "Move assignment failed to set other pointer to nullptr! It may help to review "
@@ -125,7 +125,7 @@ void test_move_self_assignment() {
       "to review the lecture on move semantics!");
   size_t sum = 0;
   for (size_t i = 0; i < 1000; ++i) {
-    auto ptr = ::make_unique<std::string>(kReallyLongString);
+    auto ptr = cs106l::make_unique<std::string>(kReallyLongString);
     ptr = std::move(ptr);
 
     // If we don't check for self-assignment in the move constructor,
@@ -160,7 +160,7 @@ const std::unordered_map<std::string, std::function<void()>> test_functions = {
     {"memory_leak_exit_code",
      []() { std::cout << MemoryDiagnostics::MemoryGuard::get_exit_code() << "\n"; }},
     {"destructor", test_destructor},
-    {"copy", test_copy<unique_ptr<std::string>>},
+    {"copy", test_copy<cs106l::unique_ptr<std::string>>},
     {"move_constructor", test_move_constructor},
     {"move_assignment", test_move_assignment},
     {"move_self_assignment", test_move_self_assignment},
