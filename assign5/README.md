@@ -109,7 +109,7 @@ std::cout << charlie << std::endl;
 // User(name=Charlie, friends=[Alice])
 ```
 
-The function signature for this operator should be `User& operator+=(const User& rhs)`. Note that like the copy-assignment operator, it returns a reference to itself.
+The function signature for this operator should be `User& operator+=(User& rhs)`. Note that like the copy-assignment operator, it returns a reference to itself.
 
 ### `operator<`
 
