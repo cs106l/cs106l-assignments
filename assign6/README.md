@@ -94,17 +94,73 @@ Should produce:
 Course not found.
 ```
 
-### Hints:
-There are three monadic operations `and_then`, `transform`, and `or_else`. Read the description of each of them in the lecture slides, and take a look at [here](https://en.cppreference.com/w/cpp/utility/optional). Namely, you only need 2 of the mondadic operations.
+### Monadic Operations
+
+There are three monadic operations: [`and_then`](https://en.cppreference.com/w/cpp/utility/optional/and_then), [`transform`](https://en.cppreference.com/w/cpp/utility/optional/transform), and [`or_else`](https://en.cppreference.com/w/cpp/utility/optional/or_else). Read the description of each of them in the lecture slides, and take a look at [the standard library documentation](https://en.cppreference.com/w/cpp/utility/optional). You will only need to use 2 of the mondadic operations.
 
 Your code should end up looking something like this:
 
 ```cpp
-    std::string output = course.<MONADIC_FN1>(<SOME LAMBDA FN>)
-    .<MONADIC_FN2>(...);
+std::string output = course
+    ./* monadic function one */ (/* ... */)
+    ./* monadic function two */ (/* ... */)
+    .value();                                  // OR `.value_or(...)`, see below
 ```
 
-Notice the lambda function being passed into the first monadic function. This should be a hint! **Think about what type output is** and what you're monadic opertaions therefore need to return/produce.
+It can help to **think about what the type of `output` is and work backwards from there**. Pay attention to what each of the monadic functions does, as described in the hint below.
+
+> [!NOTE]  
+> Recall what the role is of each of the monadic functions. The official C++ library doesn't do a good job explaining this, so we have included a short reference here. Suppose `T` and `U` are arbitrary types.
+>
+> ```cpp
+> /** 
+>  * tl;dr; 
+>  * Calls a function to produce a new optional if there is a value; otherwise, returns nothing.
+>  *
+>  * The function passed to `and_then` takes a non-optional instance of type `T` and returns a `std::optional<U>`.
+>  * If the optional has a value, `and_then` applies the function to its value and returns the result.
+>  * If the optional doesn't have a value (i.e. it is `std::nullopt`), it returns `std::nullopt`.
+>  */
+> template <typename U>
+> std::optional<U> std::optional<T>::and_then(std::function<std::optional<U>(T)> func);
+> 
+> /**
+>  * tl;dr; 
+>  * Applies a function to the stored value if present, wrapping the result in an optional, or returns nothing otherwise.
+>  *
+>  * The function passed to `transform` takes a non-optional instance of type `T` and returns a non-optional instance of type `U`.
+>  * If the optional has a value, `transform` applies the function to its value and returns the result wrapped in an `std::optional<U>`.
+>  * If the optional doesn't have a value (i.e. it is `std::nullopt`), it returns `std::nullopt`.
+>  */
+> template <typename U>
+> std::optional<U> std::optional<T>::transform(std::function<U(T)> func);
+> 
+> /** 
+>  * tl;dr; 
+>  * Returns the optional itself if it has a value; otherwise, it calls a function to produce a new optional.
+>  *
+>  * The opposite of `and_then`.
+>  * The function passed to `or_else` takes a non-optional instance of type `T` and returns a `std::optional<U>`.
+>  * If the optional has a value, `or_else` returns it.
+>  * If the optional doesn't have a value (i.e. it is `std::nullopt`), `or_else applies the function to its value and returns the result.
+>  */
+> template <typename U>
+> std::optional<U> std::optional<T>::or_else(std::function<std::optional<U>(T)> func);
+> ```
+>
+> For example, given a `std::optional<T> opt` object, the monadic operations could be invoked as follows:
+>
+> ```cpp
+> opt
+>   .and_then([](T value) -> std::optional<U> { return /* ... */; })
+>   .transform([](T value) -> U { return /* ... */; });
+>   .or_else([](T value) -> std::optional<U> { return /* ... */; })
+> ```
+>
+> <sup>Note that the `->` notation in the lambda function is a way of explicitly writing out the return type of the function!</sup>
+>
+> Notice that since each method returns an `std::optional`, you can chain them together. If you are certain that the optional will have a value at the end of the chain, you could call [`.value()`](https://en.cppreference.com/w/cpp/utility/optional/value) to get the value. Otherwise, you could call [`.value_or(fallback)`](https://en.cppreference.com/w/cpp/utility/optional/value_or) to get the result or some other `fallback` value if the optional doesn't have a value.
+
 
 
 ## 🚀 Submission Instructions
