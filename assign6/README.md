@@ -140,9 +140,9 @@ It can help to **think about what the type of `output` is and work backwards fro
 >  * Returns the optional itself if it has a value; otherwise, it calls a function to produce a new optional.
 >  *
 >  * The opposite of `and_then`.
->  * The function passed to `or_else` takes a non-optional instance of type `T` and returns a `std::optional<U>`.
+>  * The function passed to `or_else` takes in no arguments and returns a `std::optional<U>`.
 >  * If the optional has a value, `or_else` returns it.
->  * If the optional doesn't have a value (i.e. it is `std::nullopt`), `or_else applies the function to its value and returns the result.
+>  * If the optional doesn't have a value (i.e. it is `std::nullopt`), `or_else invokes the function and returns the result.
 >  */
 > template <typename U>
 > std::optional<U> std::optional<T>::or_else(std::function<std::optional<U>(T)> func);
@@ -154,7 +154,7 @@ It can help to **think about what the type of `output` is and work backwards fro
 > opt
 >   .and_then([](T value) -> std::optional<U> { return /* ... */; })
 >   .transform([](T value) -> U { return /* ... */; });
->   .or_else([](T value) -> std::optional<U> { return /* ... */; })
+>   .or_else([]() -> std::optional<U> { return /* ... */; })
 > ```
 >
 > <sup>Note that the `->` notation in the lambda function is a way of explicitly writing out the return type of the function!</sup>
