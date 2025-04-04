@@ -28,7 +28,7 @@ def copy_from_commit(commit_hash, path):
 
 def main():
     parser = argparse.ArgumentParser(description="Copies an old assignment into the worktree.")
-    parser.add_argument("assignment", help="An assignment, e.g. 'assign0', 'assign1', etc.")
+    parser.add_argument("assignment", help="An assignment, e.g. 'assignment0', 'assignment1', etc.")
     args = parser.parse_args()
 
     path = args.assignment
