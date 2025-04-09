@@ -113,7 +113,7 @@ Finally, open the command palette (<kbd>Cmd+Shift+P</kbd>), search for `Shell Co
     By default, the `g++` command on Mac is an alias to the built-in `clang` compiler. We can fix this by running 
     
     ```sh
-    echo 'alias g++="g++-14"' >> ~/.zshrc
+    echo 'export PATH="$(brew --prefix)/bin:$PATH"\nalias g++="g++-14"' >> ~/.zshrc
     ```
     
     to make `g++` point to the version of GCC we just installed. Change `g++-14` in the above command to whichever version of GCC was installed.
@@ -123,6 +123,11 @@ Finally, open the command palette (<kbd>Cmd+Shift+P</kbd>), search for `Shell Co
     ```sh
     g++ --version
     ```
+
+> [!NOTE]  
+> If you are using VSCode to run your code, you may get an issue running this last command. **Make sure you are running a `zsh` terminal inside of VSCode,** as shown in the image below:
+> ![An image showing how to change the VSCode terminal to zsh](./docs/mac-zsh.png) 
+> You will need to do this any time you want to run `g++` for this class. **Alternatively, change VSCode's default terminal to zsh** by pressing <kbd>Cmd+Shift+P</kbd>, going to **Terminal: Select Default Profile**, and selecting **`zsh`**.
 
 ### Windows
 
