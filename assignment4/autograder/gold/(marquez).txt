@@ -1,0 +1,15 @@
+Loading dictionary... loaded 464811 unique words.
+Tokenizing input... got 84 tokens.
+
+Many years later, as he faced the firing squad, Colonel <<Aureliano>> Buendía
+was to remember that distant afternoon when his father took him to discover ice.
+
+At that time Macondo was a <<vilage>> of twenty adobe houses, built on the bank
+of a river of clear water that ran along a bed of <<pollished>> stones, which were
+white and enormous, like prehistoric eggs. The world was so recent that many
+things lacked names, and in order to indicate them it was <<necesary>> to point.
+
+Aureliano: {aurelian}
+vilage: {milage, pilage, silage, viage, village, vinage, visage, volage}
+pollished: {polished}
+necesary: {necessary}

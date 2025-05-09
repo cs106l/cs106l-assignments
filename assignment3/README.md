@@ -27,7 +27,7 @@ To download the starter code for this assignment, please see the instructions fo
 
 ## Running your code
 
-To run your code, first you'll need to compile it. Open up a terminal (if you are using VSCode, hit <kbd>Ctrl+\`</kbd> or go to **Terminal > New Terminal** at the top). Then make sure that you are in the `assign3/` directory and run:
+To run your code, first you'll need to compile it. Open up a terminal (if you are using VSCode, hit <kbd>Ctrl+\`</kbd> or go to **Terminal > New Terminal** at the top). Then make sure that you are in the `assignment3/` directory and run:
 
 ```sh
 g++ -std=c++20 main.cpp class.cpp -o main

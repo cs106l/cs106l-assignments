@@ -1,0 +1,9 @@
+Loading dictionary... loaded 464811 unique words.
+Tokenizing input... got 22 tokens.
+
+This is a bunch of gibberish:
+
+ansdka nakdlsnakln lnfgklanrf nksladnksal nkglrnkadf nklsadn
+
+These are definitely misspelled, but probably don't have any suggestions.
+
