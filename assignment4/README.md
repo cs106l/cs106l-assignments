@@ -158,7 +158,7 @@ Here's a step-by-step guide you can follow to accomplish this:
     
     For our `binary_op`, we can provide a lambda function that takes in two `std::string::iterator`s (you might choose to use `auto` parameters for this lambda, as discussed in lecture) `it1` and `it2`, and constructs the `Token` using the aforementioned `Token { source, it1, it2 }` constructor. Note that we must pass `source` to this constructor, so you will need to capture it in the lambda function you create! **You must capture `source` by reference, if you do not, your code will not run!**
 
-    > **🚨 Warning 🚨**  
+    > **‼️⚠️📢🚨 Warning 🚨📢⚠️‼️**  
     > Just repeating that last part since students have had trouble with this part in the past. **You must capture `source` by reference in your lambda function** for the `Token` constructor to work. Review our lecture slides on the lambda function capture syntax if you don't remember how to do this.
 
     For the output range (`d_first`), we will first create a `std::set<Token>` to store the tokens that we find. Suppose we call that set `tokens`. Then, we can create an [`std::inserter(tokens, tokens.end())`](https://en.cppreference.com/w/cpp/iterator/inserter) to store the resulting tokens to.
