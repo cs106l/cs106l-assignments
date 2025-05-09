@@ -112,6 +112,19 @@ Here's a step-by-step guide you can follow to accomplish this:
     > int std::isspace(int ch);
     > ```
 
+[^1]: When using `std::isspace`, there is actually more than one version of the function.
+
+      ```cpp
+      int isspace(int ch);                          // Defined in header <cctype> and <ctype.h>
+
+      template <class CharT>
+      bool isspace(CharT ch, const locale& loc);    // Defined in header <locale>
+      ```
+
+      Technically, the first version is defined both [as part of the `namespace std`](https://en.cppreference.com/w/cpp/header/cctype) and [as a free-floating function inherited from C](https://en.cppreference.com/w/c/string/byte) (and not in any particular namespace). The second version is part of `std` and defined in the `<locale>` header. Writing `isspace` by itself refers to the C version, whereas `std::isspace` refers to both of the above functions and so the compiler has a hard time inferring the `UnaryPred` type parameter.
+
+      Sometimes you will see people write `::isspace`: this just tells C++ to look in the *global namespace* (not inside `std`) for `isspace`, and accomplishes the same thing.
+
 2. **Step Two: Generate tokens between consecutive space characters**  
     Now that we have all of the iterators to space characters, we can consider a token as any range of characters between two consecutive iterators to space characters. To see why, consider this diagram:
 
@@ -171,19 +184,6 @@ Here's a step-by-step guide you can follow to accomplish this:
     For `pred`, we can pass a lambda function which checks if a token is empty. For example, if `token` is a `Token`, we could check `token.content.empty()`.
 
     Finally, you can return `tokens`, which contains all of the valid tokens in the input string.
-
-[^1]: When using `std::isspace`, there is actually more than one version of the function.
-
-      ```cpp
-      int isspace(int ch);                          // Defined in header <cctype> and <ctype.h>
-
-      template <class CharT>
-      bool isspace(CharT ch, const locale& loc);    // Defined in header <locale>
-      ```
-
-      Technically, the first version is defined both [as part of the `namespace std`](https://en.cppreference.com/w/cpp/header/cctype) and [as a free-floating function inherited from C](https://en.cppreference.com/w/c/string/byte) (and not in any particular namespace). The second version is part of `std` and defined in the `<locale>` header. Writing `isspace` by itself refers to the C version, whereas `std::isspace` refers to both of the above functions and so the compiler has a hard time inferring the `UnaryPred` type parameter.
-
-      Sometimes you will see people write `::isspace`: this just tells C++ to look in the *global namespace* (not inside `std`) for `isspace`, and accomplishes the same thing.
 
 Once you've finished this step, your spellcheck should start reporting token counts. If you compile your code, you can run:
 
