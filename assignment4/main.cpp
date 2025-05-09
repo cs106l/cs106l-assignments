@@ -10,30 +10,30 @@
 #include "autograder/utils.hpp"
 #include "spellcheck.h"
 
-void print_output(const std::string& source, const std::set<Mispelling>& mispellings) {
+void print_output(const std::string& source, const std::set<Misspelling>& Misspellings) {
   std::string_view sv(source);
   size_t last_ofs = 0;
-  for (const auto& mispelling : mispellings) {
-    // Print text before the mispelling
-    std::cout << sv.substr(last_ofs, mispelling.token.src_offset - last_ofs);
+  for (const auto& Misspelling : Misspellings) {
+    // Print text before the Misspelling
+    std::cout << sv.substr(last_ofs, Misspelling.token.src_offset - last_ofs);
 
     std::cout << ansi::fg_red << "<<";
-    std::cout << sv.substr(mispelling.token.src_offset, mispelling.token.content.size());
+    std::cout << sv.substr(Misspelling.token.src_offset, Misspelling.token.content.size());
     std::cout << ">>" << ansi::reset;
-    last_ofs = mispelling.token.src_offset + mispelling.token.content.size();
+    last_ofs = Misspelling.token.src_offset + Misspelling.token.content.size();
   }
 
   std::cout << sv.substr(last_ofs) << "\n\n";
 
-  for (const auto& mispelling : mispellings) {
+  for (const auto& Misspelling : Misspellings) {
     std::cout << ansi::fg_red;
-    std::cout << sv.substr(mispelling.token.src_offset, mispelling.token.content.size());
+    std::cout << sv.substr(Misspelling.token.src_offset, Misspelling.token.content.size());
     std::cout << ansi::reset;
 
     std::cout << ": {";
 
     bool first = true;
-    for (const auto& suggestion : mispelling.suggestions) {
+    for (const auto& suggestion : Misspelling.suggestions) {
       if (!first)
         std::cout << ", ";
       std::cout << suggestion;
@@ -130,13 +130,13 @@ int main(int argc, char** argv) {
   std::cout << "got " << source.size() << " tokens." << ansi::reset << "\n\n";
 
   Timer spellcheck_timer { summary, "Spellcheck", source.size() };
-  std::set<Mispelling> mispellings = spellcheck(source, dictionary);
+  std::set<Misspelling> Misspellings = spellcheck(source, dictionary);
   spellcheck_timer.stop();
 
-  print_output(input, mispellings);
+  print_output(input, Misspellings);
 
-  if (styled && !dictionary.empty() && mispellings.empty())
+  if (styled && !dictionary.empty() && Misspellings.empty())
     print_success();
 
-  return mispellings.empty() ? 0 : EXIT_FAILURE;
+  return Misspellings.empty() ? 0 : EXIT_FAILURE;
 }

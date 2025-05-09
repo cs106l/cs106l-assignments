@@ -10,14 +10,14 @@
 template <typename Iterator, typename UnaryPred>
 std::vector<Iterator> find_all(Iterator begin, Iterator end, UnaryPred pred);
 
-Corpus tokenize(const std::string& source) {
+Corpus tokenize(std::string& source) {
   /* TODO: Implement this method */
   return Corpus();
 }
 
-std::set<Mispelling> spellcheck(const Corpus& source, const Dictionary& dictionary) {
+std::set<Misspelling> spellcheck(Corpus& source, const Dictionary& dictionary) {
   /* TODO: Implement this method */
-  return std::set<Mispelling>();
+  return std::set<Misspelling>();
 };
 
 /* Helper methods */

@@ -71,7 +71,7 @@ This may sound like a lot, but don't worry! This handout will walk you through e
 ```cpp
 struct Token { std::string content; size_t src_offset; };
 using Corpus = std::set<Token>;
-Corpus tokenize(const std::string& input);
+Corpus tokenize(std::string& input);
 ```
 
 The `tokenize` method will take an input string and split it up into a set of `Token` objects. Take a look at the `Token` struct we've defined in `spellcheck.h`. A `Token` represents a single piece of content within a larger file: conceptually, it is just a single word appearing in a broader text; in code, it is a `std::string` apppearing somewhere in a file at index `src_offset`. Our goal is to split up an input file into a set of `Token`s, which we refer to as a `Corpus` (a `Corpus` is just a type-alias for an `std::set<Token>`).
@@ -140,7 +140,7 @@ Here's a step-by-step guide you can follow to accomplish this:
     > 📄 [**`Token`**](./spellcheck.cpp)
     > ```cpp
     > template <typename It>
-    > Token(const std::string& source, It begin, It end);
+    > Token(std::string& source, It begin, It end);
     > ```
     >
     > Given a `source` string and a pair of iterators `begin` and `end` identifying the extents of a token inside `source`, constructs a `token`. Automatically handles trimming extra whitespace and punctuation characters at the edges of the token.
@@ -156,7 +156,10 @@ Here's a step-by-step guide you can follow to accomplish this:
     > 
     > Given two equally-sized ranges, one starting at `first1` and the other starting at `first2` (such that end iterator of the first range is `last1`), applies a binary function `binary_op` to each pair of iterators from the two ranges (e.g. `binary_op(first1, first2)`, `binary_op(first1 + 1, first2 + 1)`, etc.) and stores the result to the output range (of the same size) starting at `d_first`. 
     
-    For our `binary_op`, we can provide a lambda function that takes in two `std::string::const_iterator`s (you might choose to use `auto` parameters for this lambda, as discussed in lecture) `it1` and `it2`, and constructs the `Token` using the aforementioned `Token { source, it1, it2 }` constructor. Note that we must pass `source` to this constructor, so you will need to capture it in the lambda function you create!
+    For our `binary_op`, we can provide a lambda function that takes in two `std::string::iterator`s (you might choose to use `auto` parameters for this lambda, as discussed in lecture) `it1` and `it2`, and constructs the `Token` using the aforementioned `Token { source, it1, it2 }` constructor. Note that we must pass `source` to this constructor, so you will need to capture it in the lambda function you create! **You must capture `source` by reference, if you do not, your code will not run!**
+
+    > **🚨 Warning 🚨**  
+    > Just repeating that last part since students have had trouble with this part in the past. **You must capture `source` by reference in your lambda function** for the `Token` constructor to work. Review our lecture slides on the lambda function capture syntax if you don't remember how to do this.
 
     For the output range (`d_first`), we will first create a `std::set<Token>` to store the tokens that we find. Suppose we call that set `tokens`. Then, we can create an [`std::inserter(tokens, tokens.end())`](https://en.cppreference.com/w/cpp/iterator/inserter) to store the resulting tokens to.
 
@@ -181,7 +184,7 @@ Here's a step-by-step guide you can follow to accomplish this:
     > std::set<Key, Compare, Alloc>::size_type erase_if (std::set<Key, Compare, Alloc>& c, Pred pred);
     > ```
 
-    For `pred`, we can pass a lambda function which checks if a token is empty. For example, if `token` is a `Token`, we could check `token.content.empty()`.
+    For `pred`, we can pass a lambda function which checks if a token is empty. For example, we could check `token.content.empty()`.
 
     Finally, you can return `tokens`, which contains all of the valid tokens in the input string.
 
@@ -203,17 +206,14 @@ Your tokenize method has tokenized an English dictionary of about a half-million
 ### `spellcheck`
 
 ```cpp
-struct Mispelling { Token token; std::set<std::string> suggestions; };
+struct Misspelling { Token token; std::set<std::string> suggestions; };
 using Dictionary = std::unordered_set<std::string>;
-std::set<Mispelling> spellcheck(const Corpus& source, const Dictionary& dictionary);
+std::set<Misspelling> spellcheck(const Corpus& source, const Dictionary& dictionary);
 ```
 
-The `spellcheck` method takes in a tokenized `Corpus` (this is the output of your `tokenize` method) and a `Dictionary` (which is just an `std::unordered_set<std::string>` represent all the valid English words), and returns a set of `Mispelling` structs. Each `Mispelling` struct identifies a misspelled `token` and a set of suggested words that `token` could be replaced with to spell the word properly.
+The `spellcheck` method takes in a tokenized `Corpus` (this is the output of your `tokenize` method) and a `Dictionary` (which is just an `std::unordered_set<std::string>` represent all the valid English words), and returns a set of `Misspelling` structs. Each `Misspelling` struct identifies a misspelled `token` and a set of suggested words that `token` could be replaced with to spell the word properly.
 
-> [!NOTE]
-> **Addendum:** After releasing this assignment, we realized that the name `Mispelling` is itself actually misspelled. Ah... the irony.
-
-To identify mispellings, we will run the following algorithm. This time, we get some practice using the new ranges/views library in the `std::ranges::views` namespace:
+To identify Misspellings, we will run the following algorithm. This time, we get some practice using the new ranges/views library in the `std::ranges::views` namespace:
 
 1. Skip words that are already correctly spelled.
 2. Otherwise, find one-edit-away words in the dictionary using Damerau-Levenshtein.
@@ -257,7 +257,7 @@ Here's a step-by-step guide to implement this algorithm:
     Your job in this step is to replace `/* A lambda function predicate */` with a lambda function that takes in a `Token` and returns `true` if that token's content is spelled **incorrectly** (we are only interested in misspelled words). To do this, you will need to make reference to `dictionary` inside of the lambda function, and so you will have to capture it. Should you capture it by reference or value?
 
 2. **Step Two: Find one-edit-away words in the dictionary using Damerau-Levenshtein**  
-    At this point, `view` represents a view over all the tokens in `source` that are *incorrectly spelled*. Now, we will transform each of these misspelled tokens into a corresponding `Mispelling` object (and generate suggestions in the process) using the `std::ranges::views::transform` view. 
+    At this point, `view` represents a view over all the tokens in `source` that are *incorrectly spelled*. Now, we will transform each of these misspelled tokens into a corresponding `Misspelling` object (and generate suggestions in the process) using the `std::ranges::views::transform` view. 
 
     >  📄 [**`std::ranges::views::transform`**](https://en.cppreference.com/w/cpp/ranges/transform_view)  
     > ```cpp
@@ -276,11 +276,11 @@ Here's a step-by-step guide to implement this algorithm:
     namespace rv = std::ranges::views;
     auto view = source 
         | rv::filter(/* A lambda function predicate */)
-        | rv::transform(/* A lambda function taking a Token -> Mispelling */);
+        | rv::transform(/* A lambda function taking a Token -> Misspelling */);
     ```
     <sup>Note: this is just one approach: your solution may look different if you choose to use the `transform(r, func)` overload or if you don't use a `namespace rv` alias.</sup>
     
-    What should we put for `/* A lambda function taking a Token -> Mispelling */`? We should replace it with a lambda function that takes in a `Token` object and produces a `Mispelling` object that contains all of the suggested alternate spellings for `token`. To identify suggestions, we will search through `dictionary` for all the words whose Damerau-Levenshtein distance to `token.content` is exactly `1`. To find the Damerau-Levenshtein distance, you can use the provided `levenshtein` function.
+    What should we put for `/* A lambda function taking a Token -> Misspelling */`? We should replace it with a lambda function that takes in a `Token` object and produces a `Misspelling` object that contains all of the suggested alternate spellings for `token`. To identify suggestions, we will search through `dictionary` for all the words whose Damerau-Levenshtein distance to `token.content` is exactly `1`. To find the Damerau-Levenshtein distance, you can use the provided `levenshtein` function.
 
     > 📄 [**`levenshtein`**](./spellcheck.h)  
     > ```cpp
@@ -289,7 +289,7 @@ Here's a step-by-step guide to implement this algorithm:
     >
     > Returns the Damerau-Levenshtein distance between `a` and `b`. Roughly speaking, this represents the number of modifications that must be performed to `a` in order to arrive at `b`. In reality, this function implements a highly optimized version of the Damerau-Levenshtein distance that will early exit if at any point the computed distance would be greater than `1`. 
 
-    Note that going through `dictionary` and finding suggestions should happen for *each* misspelled word. **That means that you will need to nest another `std::ranges::views::filter` call inside the `/* A lambda function taking a Token -> Mispelling */`.** To construct the `std::set` of suggestions, you will need to materialize the nested view of suggested words into a set, triggering the lazy evaluation, using [overload (4) of the `std::set` constructor](https://en.cppreference.com/w/cpp/container/set/set).
+    Note that going through `dictionary` and finding suggestions should happen for *each* misspelled word. **That means that you will need to nest another `std::ranges::views::filter` call inside the `/* A lambda function taking a Token -> Misspelling */`.** To construct the `std::set` of suggestions, you will need to materialize the nested view of suggested words into a set, triggering the lazy evaluation, using [overload (4) of the `std::set` constructor](https://en.cppreference.com/w/cpp/container/set/set).
 
     > 📄 [**`std::set`**](https://en.cppreference.com/w/cpp/ranges/transform_view)  
     > ```cpp
@@ -306,18 +306,18 @@ Here's a step-by-step guide to implement this algorithm:
     std::set<std::string> suggestions(view.begin(), view.end());
     ```
 
-    Lastly, to create a `Mispelling` object from a `token` and a set of `suggestions`, we can use uniform initialization:
+    Lastly, to create a `Misspelling` object from a `token` and a set of `suggestions`, we can use uniform initialization:
 
     ```cpp
-    Mispelling { token, suggestions }
+    Misspelling { token, suggestions }
     ```
 
-    This should be the return value of the `/* A lambda function taking a Token -> Mispelling */` lambda function in the code above.
+    This should be the return value of the `/* A lambda function taking a Token -> Misspelling */` lambda function in the code above.
 
 3. **Step Three: Drop misspellings with no suggestions.**  
-    At this point, `view` contains all of our misspelled words with their suggestions: it is a view over a collection of `Mispelling` objects. However, some of these `Mispelling` objects won't have any suggestions. For example, the gibberish word `"adskadnfknfs"` is definitely misspelled, but there's no word in the English dictionary that is one edit away from it. We would like to remove these suggestion-less mispellings from our view before returning them.
+    At this point, `view` contains all of our misspelled words with their suggestions: it is a view over a collection of `Misspelling` objects. However, some of these `Misspelling` objects won't have any suggestions. For example, the gibberish word `"adskadnfknfs"` is definitely misspelled, but there's no word in the English dictionary that is one edit away from it. We would like to remove these suggestion-less Misspellings from our view before returning them.
 
-    Once again, we can apply `std::ranges::views::filter` to `view`. You should have all the information you need to do this! After you filter the empty mispellings, you'll want to materialize `view` into an `std::set<Mispelling>` and return it, which you can do through similar process described for `suggestions` in Part Two above!
+    Once again, we can apply `std::ranges::views::filter` to `view`. You should have all the information you need to do this! After you filter the empty Misspellings, you'll want to materialize `view` into an `std::set<Misspelling>` and return it, which you can do through similar process described for `suggestions` in Part Two above!
 
     > ⚠️ [**`std::ranges::to`**](https://en.cppreference.com/w/cpp/ranges/to)  
     > You might remember that we used `std::ranges::to` in lecture to materialize a view of `char` into an `std::string`:
@@ -326,7 +326,7 @@ Here's a step-by-step guide to implement this algorithm:
     >            | /* Some other steps */
     >            | std::ranges::to<std::string>();
     > ```
-    > You might be tempted to do something similar here with `std::ranges::to<std::set<Mispelling>>()`. This is a good idea! But the `std::ranges::to` method was only recently introduced in C++23. Depending on the version of compiler you are using, this code may compile or it may not! To be safe, and to make sure that your code compiles when we run it through the autograder on our end, please use the `std::set<Mispelling>` constructor with iterators. **In general, please only use C++ features up through C++20 for this assignment.**
+    > You might be tempted to do something similar here with `std::ranges::to<std::set<Misspelling>>()`. This is a good idea! But the `std::ranges::to` method was only recently introduced in C++23. Depending on the version of compiler you are using, this code may compile or it may not! To be safe, and to make sure that your code compiles when we run it through the autograder on our end, please use the `std::set<Misspelling>` constructor with iterators. **In general, please only use C++ features up through C++20 for this assignment.**
 
 If you have implemented everything correctly up to this point, you should have a fully functioning spellchecker! To test it out, try re-compiling and running:
 
