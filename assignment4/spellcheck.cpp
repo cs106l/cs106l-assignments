@@ -15,7 +15,7 @@ Corpus tokenize(std::string& source) {
   return Corpus();
 }
 
-std::set<Misspelling> spellcheck(Corpus& source, const Dictionary& dictionary) {
+std::set<Misspelling> spellcheck(const Corpus& source, const Dictionary& dictionary) {
   /* TODO: Implement this method */
   return std::set<Misspelling>();
 };
