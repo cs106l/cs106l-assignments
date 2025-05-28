@@ -4,7 +4,7 @@
 
 # Assignment 7: Unique Pointer
 
-Due Sunday, June 4th at 11:59PM
+Due Friday, June 6th at 11:59PM
 
 ## Overview
 
