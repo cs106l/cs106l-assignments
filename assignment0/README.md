@@ -8,7 +8,7 @@ Due Friday, October 10th at 11:59PM
 
 Welcome to CS106L! This assignment will get you setup for the rest of the quarter so that setup for the rest of the assignments is simple and smooth. By the end of this assignment, you should be able to compile and run C++ files from VSCode and run the autograder, which you'll be doing for each of the remaining assignments!
 
-If you run into any issues during setup, please reach out to us on [EdStem](https://edstem.org/us/courses/77935/discussion) or come to our office hours!
+If you run into any issues during setup, please reach out to us on [EdStem](https://edstem.org/us/courses/81492/discussion) or come to our office hours!
 
 ## Part 1: Installing Python
 
@@ -290,4 +290,4 @@ After compiling and running, if your autograder looks like this:
 
 ![An image showing a terminal window where the autograder has run with all tests passing](docs/autograder.png)
 
-then you have finished the assignment! Woot woot. To submit the assignment, please complete the feedback form [at this link](https://forms.gle/bC4xG9o1tsABsCug9)!
+then you have finished the assignment! Woot woot. To submit the assignment, please complete the feedback form [at this link](https://forms.gle/gcsCaABoJH4ibPf7A)!
