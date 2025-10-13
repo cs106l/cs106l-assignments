@@ -113,7 +113,7 @@ then you have finished the assignment! Woot woot.
 
 To submit the assignment:
 1. Please complete the feedback form [at this link](https://forms.gle/UeD6zjmUpFbhGgw98). 
-2. Submit your assignment on [Paperless](https://cs198.stanford.edu/paperless/CS/106L#assignments)!
+2. Submit your assignment on [Paperless](https://paperless.stanford.edu)!
 
 Your deliverable should be:
 
