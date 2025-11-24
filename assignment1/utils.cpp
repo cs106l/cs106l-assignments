@@ -63,7 +63,7 @@ bool operator==(const Course& lhs, const Course& rhs) {
 }
 
 std::ostream& operator<<(std::ostream& os, const Course& course) {
-  os << course.title << ", " << course.number_of_units << ", " << course.quarter;
+  os << course.title << "," << course.number_of_units << "," << course.quarter;
   return os;
 }
 
