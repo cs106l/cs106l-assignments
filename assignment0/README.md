@@ -2,7 +2,7 @@
 
 # Assignment 0: Setup!
 
-Due Friday, October 10th at 11:59PM
+Due Friday, April 17th at 11:59PM
 
 ## Overview
 
