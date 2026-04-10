@@ -1,6 +1,6 @@
 <img src="docs/header.png" width="100%" />
 
-# Assignment 0: Setup!
+# Assignment Setup!
 
 Due Friday, April 17th at 11:59PM
 
@@ -284,10 +284,10 @@ which will actually run the `main` function in `main.cpp`. This will execute you
 >
 > Afterwards, you should be able to compile normally.
 
-# 🚀 Submission Instructions
+# 🚀 Once you're done...
 
 After compiling and running, if your autograder looks like this:
 
 ![An image showing a terminal window where the autograder has run with all tests passing](docs/autograder.png)
 
-then you have finished the assignment! Woot woot. To submit the assignment, please complete the feedback form [at this link](https://forms.gle/gcsCaABoJH4ibPf7A)!
+then you have finished the assignment setup! Woot woot. You're now ready to move onto [Assignment 1](assignment1/README.md)!
