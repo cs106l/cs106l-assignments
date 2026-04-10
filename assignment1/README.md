@@ -4,7 +4,7 @@ Due Friday, April 17th, at 11:59PM
 
 ## Setting up C++
 
-Go find and follow the setup instructions in [Assignment Setup](assignment-setup/README.md) to get your C++ compiler and autograder set up for this assignment.
+Go find and follow the setup instructions in [Assignment Setup](../assignment-setup/README.md) to get your C++ compiler and autograder set up for this assignment.
 
 ## Overview
 
