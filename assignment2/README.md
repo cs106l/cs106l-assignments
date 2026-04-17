@@ -4,7 +4,7 @@
 
 # Assignment 2: Marriage Pact
 
-Due Saturday, October 25th at 11:59PM
+Due Friday, April 24th at 11:59PM
 
 ## Overview
 
