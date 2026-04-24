@@ -4,7 +4,7 @@
 
 # Assignment 3: Make a Class
 
-Due Saturday November 1st at 11:59PM
+Due Friday May 1st at 11:59PM
 
 ## Overview
 
