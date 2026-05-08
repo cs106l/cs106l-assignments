@@ -4,7 +4,7 @@
 
 # Assignment 5: Treebook
 
-Due Saturday, November 15th at 11:59PM
+Due Friday, May 15th at 11:59PM
 
 ## Overview
 
