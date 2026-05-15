@@ -1,6 +1,6 @@
 # Assignment 6: Explore Courses
 
-Due Saturday, November 22nd at 11:59PM
+Due Friday, May 22nd at 11:59PM
 
 ## Overview
 
