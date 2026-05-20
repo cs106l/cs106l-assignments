@@ -217,10 +217,10 @@ which will download the starter code into a folder `cs106l-assignments`.
 When working on assignments in this class, we recommend you open up a VSCode workspace for the specific assignment folder you are working on. So if you now have a folder `cs106l-assignments`, you can first `cd` (change directory) into the correct folder:
 
 ```sh
-cd cs106l-assignments/assignment0
+cd cs106l-assignments/assignment-setup
 ```
 
-which changes your working directory to `assignment0`, and then you can open up a VSCode workspace dedicated to this folder:
+which changes your working directory to `assignment-setup`, and then you can open up a VSCode workspace dedicated to this folder:
 
 ```sh
 code .
@@ -240,7 +240,7 @@ You should now have the latest starter code!
 
 # Part 4: Testing your setup!
 
-Now we will have you compile your first C++ file and run the autograder. To run any C++ code, first you'll need to compile it. Open up a VSCode terminal (again, hit <kbd>Ctrl+\`</kbd> or go to **Terminal > New Terminal** at the top of the window). Then make sure that you are in the `assignment0/` directory and run:
+Now we will have you compile your first C++ file and run the autograder. To run any C++ code, first you'll need to compile it. Open up a VSCode terminal (again, hit <kbd>Ctrl+\`</kbd> or go to **Terminal > New Terminal** at the top of the window). Then make sure that you are in the `assignment-setup/` directory and run:
 
 ```sh
 g++ -std=c++23 main.cpp -o main
