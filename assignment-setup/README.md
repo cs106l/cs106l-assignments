@@ -240,7 +240,7 @@ You should now have the latest starter code!
 
 # Part 4: Testing your setup!
 
-Now we will have you compile your first C++ file and run the autograder. To run any C++ code, first you'll need to compile it. Open up a VSCode terminal (again, hit <kbd>Ctrl+\`</kbd> or go to **Terminal > New Terminal** at the top of the window). Then make sure that you are in the `assignment0/` directory and run:
+Now we will have you compile your first C++ file and run the autograder. To run any C++ code, first you'll need to compile it. Open up a VSCode terminal (again, hit <kbd>Ctrl+\`</kbd> or go to **Terminal > New Terminal** at the top of the window). Then make sure that you are in the `assignment-setup/` directory and run:
 
 ```sh
 g++ -std=c++23 main.cpp -o main
