@@ -109,18 +109,60 @@ Finally, open the command palette (<kbd>Cmd+Shift+P</kbd>), search for `Shell Co
 
     which will install the GCC compiler on your machine.
 
-4. Make note of which GCC version Homebrew installs. In most cases, this will be `g++-14`. 
-    By default, the `g++` command on Mac is an alias to the built-in `clang` compiler. We can fix this by running 
-    
+4. Homebrew installs GNU GCC executables with versioned names on macOS, such as
+    `gcc-<version>` and `g++-<version>`. The exact version changes over time, so
+    do not assume that a specific version is installed. Find the GNU C++ compiler
+    that Homebrew installed and verify it:
+
     ```sh
-    echo 'export PATH="$(brew --prefix)/bin:$PATH"\nalias g++="g++-14"' >> ~/.zshrc
+    GXX="$(find "$(brew --prefix gcc)/bin" -maxdepth 1 -name 'g++-*' -print -quit)"
+    "$GXX" --version
     ```
-    
-    to make `g++` point to the version of GCC we just installed. Change `g++-14` in the above command to whichever version of GCC was installed.
 
-5. Restart your terminal and verify that everything worked by running the following command:
+    The output should identify the compiler as Homebrew GCC. Once you have a C++
+    file to compile, we recommend invoking this versioned compiler directly. For
+    example, from a directory containing `main.cpp`:
 
     ```sh
+    "$GXX" -std=c++23 main.cpp -o main
+    ```
+
+    On macOS, the unversioned `g++` command normally invokes Apple Clang.
+    Homebrew gives GNU GCC versioned executable names instead of replacing the
+    platform compiler.
+
+5. **Optional:** If you want `g++` to invoke Homebrew GCC, first check whether
+    an existing `g++` alias is already present:
+
+    ```sh
+    grep -nE '^[[:space:]]*alias[[:space:]]+g[+][+]=' ~/.zshrc 2>/dev/null
+    ```
+
+    If there is no existing alias, detect the compiler again and add an alias
+    only if the detected path is executable:
+
+    ```sh
+    GXX="$(find "$(brew --prefix gcc)/bin" -maxdepth 1 -name 'g++-*' -print -quit)"
+    if [[ -x "$GXX" ]]; then
+      printf "\nalias g++='%s'\n" "$GXX" >> ~/.zshrc
+    else
+      echo "Homebrew g++ was not found." >&2
+    fi
+    ```
+
+    If an older `g++` alias already exists, update or remove that line instead of
+    appending another alias. After upgrading GCC to a new major version, repeat
+    step 4 and update the alias. Restart your terminal or reload the
+    configuration:
+
+    ```sh
+    source ~/.zshrc
+    ```
+
+    Then verify it:
+
+    ```sh
+    type g++
     g++ --version
     ```
 
