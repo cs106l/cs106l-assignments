@@ -1,5 +1,5 @@
 /*
- * CS106L Assignment 1: SimpleEnroll
+ * CS106L Assignment 1: EnrollmentNavigator
  * Created by Fabio Ibanez with modifications by Jacob Roberts-Baca.
  *
  * Welcome to Assignment 1 of CS106L! Please complete each STUDENT TODO

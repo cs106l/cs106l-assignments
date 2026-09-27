@@ -1,6 +1,4 @@
-# Assignment 1: SimpleEnroll
-
-Due Friday, April 17th, at 11:59PM
+# Assignment 1: EnrollmentNavigator
 
 ## Setting up C++
 
@@ -8,15 +6,15 @@ Go find and follow the setup instructions in [Assignment Setup](../assignment-se
 
 ## Overview
 
-It’s that time of the quarter again; time to use SimpleEnroll 🤗 Wootwoot.
+It’s that time of the quarter again; time to use EnrollmentNavigator 🤗 Wootwoot.
 One thing everyone realizes in their Stanford career at one point is that they
 have to eventually graduate — and so enrolling in classes becomes a strategic
 endeavor to maximize the XP towards graduation, while also being able to sleep
 more than 4 hours a night!
 
-In this hopefully short assignment, we’re going to use data from the
+In this hopefully short assignment, we’re going to use example data from the
 ExploreCourses API to figure out which CS classes on ExploreCourses are
-offered this year, and which are not! We’ll be taking advantage of streams, while also exercising initialization and references in C++. Lets jump in ʕ•́ᴥ•̀ʔっ
+offered, and which are not! We’ll be taking advantage of streams, while also exercising initialization and references in C++. Lets jump in ʕ•́ᴥ•̀ʔっ
 
 There are only two files you should need to care about:
 
