@@ -68,10 +68,8 @@ std::ostream& operator<<(std::ostream& os, const Course& course) {
 }
 
 template <typename T>
-concept is_valid_course = requires(T t) {
-  { T{"Standard C++ Programming", "1", "2023-2024 Winter"} };
-  std::is_same_v<T, Course>;
-};
+concept is_valid_course = std::constructible_from<T, std::string, std::string, std::string>
+                      ||  std::constructible_from<T, std::string, int, std::string>;
 
 int
 run_autograder()
