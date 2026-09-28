@@ -69,7 +69,9 @@ std::ostream& operator<<(std::ostream& os, const Course& course) {
 
 template <typename T>
 concept is_valid_course = std::constructible_from<T, std::string, std::string, std::string>
-                      ||  std::constructible_from<T, std::string, int, std::string>;
+                      ||  std::constructible_from<T, std::string, int, std::string>
+                      ||  std::constructible_from<T, std::string, int, int>
+                      ||  std::constructible_from<T, std::string, std::string, int>;
 
 int
 run_autograder()
