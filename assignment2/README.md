@@ -4,8 +4,6 @@
 
 # Assignment 2: Marriage Pact
 
-Due Friday, April 24th at 11:59PM
-
 ## Overview
 
 Happy assignment 2! This is meant to be a very short and sweet bit of practice to get you started working with the STL's containers and pointers.
@@ -115,8 +113,8 @@ Afterwards, answer the following question in `short_answer.txt`:
 ## 🚀 Submission Instructions
 
 To submit the assignment:
-1. Please complete the feedback form [at this link](https://forms.gle/Zv27LwmtCPz88Kg46). 
-2. Submit your assignment on [Paperless](https://paperless.stanford.edu)!
+1. Please compile your files `main.cpp` and `short_answer.txt` together into a `.zip`. 
+2. Send your `.zip` file to `cs106l-aut2627-staff@lists.stanford.edu` from your Stanford email, with the email subject of `CS106L Assignment 2 Submission`.
 
 Your deliverable should be:
 
