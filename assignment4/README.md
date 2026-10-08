@@ -5,8 +5,6 @@
 
 # Assignment 4: Ispell
 
-Due Friday, May 8th at 11:59PM
-
 ## Overview
 
 Now that we've spent some time discussing the core components of the STL—containers, iterators, functors, and algorithms—and the key ingredient that powers it all—templates—let's put it all together! 
@@ -380,8 +378,7 @@ To fully test your spellchecker, try re-compiling and running the autograder:
 ```
 
 If you pass all tests, you are ready to submit! To submit the assignment:
-1. Please complete the feedback form [at this link](https://forms.gle/AMq7kvVKprKmBafKA). 
-2. Submit your assignment on [Paperless](https://paperless.stanford.edu)!
+1. Send your code from `spellcheck.cpp` to `cs106l-aut2627-staff@lists.stanford.edu` from your Stanford email, with the email subject of `CS106L Assignment 4 Submission`.
 
 Your deliverable should be:
 

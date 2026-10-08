@@ -2,8 +2,6 @@
 
 # Assignment Setup!
 
-Due Friday, April 17th at 11:59PM
-
 ## Overview
 
 Welcome to CS106L! This assignment will get you setup for the rest of the quarter so that setup for the rest of the assignments is simple and smooth. By the end of this assignment, you should be able to compile and run C++ files from VSCode and run the autograder, which you'll be doing for each of the remaining assignments!

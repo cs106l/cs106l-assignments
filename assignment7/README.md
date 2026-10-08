@@ -4,8 +4,6 @@
 
 # Assignment 7: Unique Pointer
 
-Due Sunday, May 31st at 11:59PM
-
 ## Overview
 
 In this assignment, you will implement a custom version of `unique_ptr` in order to gain some exposure to concepts like RAII and smart pointers that were introduced in lecture this week. In addition, you will exercise some of the skills we've seen throughout the course: templates, operator overloading, and move semantics.
@@ -184,8 +182,8 @@ Once you've implemented `create_list`, we can now create a list and print it out
 ## 🚀 Submission Instructions
 
 If you pass all tests, you are ready to submit! To submit the assignment:
-1. Please complete the feedback form [at this link](https://forms.gle/uHr3J8Vm3gECkZpm9). 
-2. Submit your assignment on [Paperless](https://paperless.stanford.edu)!
+1. Please compile your files `unique_ptr.h`, `main.cpp`, and `short_answer.txt` together into a `.zip`. 
+2. Send your `.zip` file to `cs106l-aut2627-staff@lists.stanford.edu` from your Stanford email, with the email subject of `CS106L Assignment 7 Submission`.
 
 Your deliverable should be:
 

@@ -4,8 +4,6 @@
 
 # Assignment 5: Treebook
 
-Due Friday, May 15th at 11:59PM
-
 ## Overview
 
 The newest Stanford social media startup is Treebook, and you’re a founding member of the team! To get the product off the ground and compete with an unnamed, completely legally unaffiliated app from Harvard, you’ve been assigned the task of implementing user profiles.
@@ -133,8 +131,8 @@ The function signature for this operator should be `bool operator<(const User& r
 ## 🚀 Submission Instructions
 
 If you pass all tests, you are ready to submit! To submit the assignment:
-1. Please complete the feedback form [at this link](https://forms.gle/tfLJSKnuUbUx9Xdi6). 
-2. Submit your assignment on [Paperless](https://paperless.stanford.edu)!
+1. Please compile your files `user.h` and `user.cpp` together into a `.zip`. 
+2. Send your `.zip` file to `cs106l-aut2627-staff@lists.stanford.edu` from your Stanford email, with the email subject of `CS106L Assignment 5 Submission`.
 
 Your deliverable should be:
 
