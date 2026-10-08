@@ -4,6 +4,10 @@
 
 # Assignment 2: Marriage Pact
 
+## Setting up C++
+
+Go find and follow the setup instructions in [Assignment Setup](../assignment-setup/README.md) to get your C++ compiler and autograder set up for this assignment.
+
 ## Overview
 
 Happy assignment 2! This is meant to be a very short and sweet bit of practice to get you started working with the STL's containers and pointers.

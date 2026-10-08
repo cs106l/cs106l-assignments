@@ -4,6 +4,10 @@
 
 # Assignment 7: Unique Pointer
 
+## Setting up C++
+
+Go find and follow the setup instructions in [Assignment Setup](../assignment-setup/README.md) to get your C++ compiler and autograder set up for this assignment.
+
 ## Overview
 
 In this assignment, you will implement a custom version of `unique_ptr` in order to gain some exposure to concepts like RAII and smart pointers that were introduced in lecture this week. In addition, you will exercise some of the skills we've seen throughout the course: templates, operator overloading, and move semantics.

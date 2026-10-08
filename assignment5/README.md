@@ -4,6 +4,10 @@
 
 # Assignment 5: Treebook
 
+## Setting up C++
+
+Go find and follow the setup instructions in [Assignment Setup](../assignment-setup/README.md) to get your C++ compiler and autograder set up for this assignment.
+
 ## Overview
 
 The newest Stanford social media startup is Treebook, and you’re a founding member of the team! To get the product off the ground and compete with an unnamed, completely legally unaffiliated app from Harvard, you’ve been assigned the task of implementing user profiles.
