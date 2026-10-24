@@ -244,8 +244,9 @@ def install_castxml():
         "requests==2.32.3",
         # For CastXML installation
         "py-cpuinfo==9.0.0",
-        # For inspecting CPP files in code
-        "pygccxml==2.5.0"
+        # For inspecting CPP files in code. 3.x is the first that reads the
+        # output of CastXML v2026.01.30 (2.x fails to relink its classes).
+        "pygccxml==3.0.2"
     ]
 
     for package in castxml_install_packages:
@@ -259,12 +260,30 @@ def install_castxml():
         [castxml_bin_dir, *os.environ.get("PATH", "").split(os.pathsep)]
     )
 
-    if os.path.isdir(castxml_dir):
-        return
-    
-    print("⏳ Installing CastXML...")
+    def get_macos_major():
+        import platform
+        import subprocess
+
+        version = platform.mac_ver()[0]
+        # Pythons built against an old SDK report every macOS since 11 as
+        # "10.16", so ask the system directly in that case.
+        if not version or version.startswith("10.16"):
+            try:
+                version = subprocess.run(
+                    ["sw_vers", "-productVersion"],
+                    capture_output=True,
+                    text=True,
+                    env={**os.environ, "SYSTEM_VERSION_COMPAT": "0"},
+                ).stdout.strip()
+            except OSError:
+                pass
+        try:
+            return int(version.split(".")[0])
+        except ValueError:
+            return 0
 
     def get_platform_file():
+        """The CastXMLSuperbuild release and archive to download for this machine."""
         import platform
         import cpuinfo
         import re
@@ -272,25 +291,60 @@ def install_castxml():
         os_name = platform.system().lower()
         arch = platform.machine().lower()
 
+        # CastXML parses with its own bundled Clang, so that Clang has to
+        # understand the student's standard library headers. v0.6.5's is too
+        # old for current ones: libc++ in the Command Line Tools for Xcode 16.3+
+        # calls __builtin_ctzg, and GCC 15's libstdc++ uses bf16 literals and
+        # __assume__, so parsing anything that includes <string> fails.
+        # v2026.01.30 bundles LLVM 21. Alma Linux 8 is its most portable Linux
+        # build (glibc 2.28).
         if os_name == "linux" and arch == "aarch64":
-            return "linux-aarch64.tar.gz"
+            return "v2026.01.30", "castxml-alma-linux-8-arm-aarch64.tar.gz"
         elif os_name == "linux":
-            return "linux.tar.gz"
+            return "v2026.01.30", "castxml-alma-linux-8-x86_64.tar.gz"
         elif os_name == "darwin":
             # Need to handle running Python under Rosetta on Apple Silicon
             brand = cpuinfo.get_cpu_info()["brand_raw"]
-            if "arm" in arch or re.match(r"Apple M\d+", brand):
-                return "macos-arm.tar.gz"
-            return "macosx.tar.gz"
+            is_arm = "arm" in arch or re.match(r"Apple M\d+", brand)
+            # The v2026.01.30 macOS binaries need macOS 15. Older Macs cannot
+            # install the Command Line Tools with the new headers anyway, so
+            # they keep v0.6.5, which parses the headers they do have.
+            if get_macos_major() >= 15:
+                if is_arm:
+                    return "v2026.01.30", "castxml-macos-15-arm64.tar.gz"
+                return "v2026.01.30", "castxml-macos-15-intel-x86_64.tar.gz"
+            if is_arm:
+                return "v0.6.5", "castxml-macos-arm.tar.gz"
+            return "v0.6.5", "castxml-macosx.tar.gz"
         elif os_name == "windows":
-            return "windows.zip"
+            # The win11 build links the MSVC runtime, as v0.6.5 did. The
+            # windows-2022 one links MinGW's libstdc++-6.dll and crashes when an
+            # older copy (Git for Windows ships one) comes first on PATH.
+            return "v2026.01.30", "castxml-windows-win11-amd64.zip"
 
         raise RuntimeError(
             f"It looks like you are running on an unknown platform: {os_name}/{arch}. Please make a post on EdStem!"
         )
 
-    castxml_file = get_platform_file()
-    castxml_download_url = f"https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.5/castxml-{castxml_file}"
+    castxml_release, castxml_file = get_platform_file()
+    castxml_download_url = f"https://github.com/CastXML/CastXMLSuperbuild/releases/download/{castxml_release}/{castxml_file}"
+
+    # Records which download is unpacked in castxml_dir, so a machine that needs
+    # a different build gets it instead of keeping the one it already has.
+    # Installs from before this file existed are v0.6.5.
+    castxml_version_path = os.path.join(castxml_dir, "cs106l-castxml-url.txt")
+    if os.path.isdir(castxml_dir):
+        try:
+            with open(castxml_version_path) as f:
+                installed_url = f.read().strip()
+        except OSError:
+            installed_url = f"https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.5/{castxml_file}"
+        if installed_url == castxml_download_url:
+            return
+        import shutil
+        shutil.rmtree(castxml_dir)
+
+    print("⏳ Installing CastXML...")
 
     import requests
     import zipfile
@@ -310,6 +364,9 @@ def install_castxml():
     elif castxml_file.endswith(".tar.gz"):
         with tarfile.open(castxml_archive_path, "r:gz") as tar_ref:
             tar_ref.extractall(bin_path)
+
+    with open(castxml_version_path, "w") as f:
+        f.write(castxml_download_url)
 
     print("✅ Installed CastXML!")
 
